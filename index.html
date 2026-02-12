@@ -42,20 +42,26 @@
         .menu-item { padding: 15px; border-radius: 12px; font-family: 'Orbitron'; font-size: 12px; background: var(--glass); display: flex; align-items: center; gap: 15px; cursor: pointer; }
 
         /* VIEW */
-        .view { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 90px; overflow-y: auto; padding-bottom: 40px; }
+        .view { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 80px; overflow-y: auto; padding-bottom: 100px; }
         .view.active { display: flex; }
+
+        /* SLIDER 3D CARDS */
+        .slider-3d { position: relative; width: 280px; height: 320px; transform-style: preserve-3d; transition: 0.6s; margin: 20px 0; }
+        .card-3d { position: absolute; width: 100%; height: 100%; background: rgba(20, 20, 25, 0.98); border-radius: 20px; padding: 25px; text-align: center; border: 1px solid rgba(255,255,255,0.1); transition: 0.6s; backface-visibility: hidden; }
+        .card-3d.active { transform: translateX(0) scale(1); opacity: 1; z-index: 10; border-color: var(--accent); box-shadow: 0 0 20px rgba(219, 219, 255, 0.2); }
+        .card-3d.next { transform: translateX(100%) scale(0.8) rotateY(-30deg); opacity: 0.2; z-index: 5; }
+        .card-3d.prev { transform: translateX(-100%) scale(0.8) rotateY(30deg); opacity: 0.2; z-index: 5; }
 
         /* ADMIN COMPONENTS */
         .admin-card { width: 90%; background: var(--glass); border: 1px solid #333; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
         .admin-input { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; outline: none; margin-top: 8px; }
         .btn-main { background: var(--accent); color: #000; border: none; padding: 15px 0; border-radius: 40px; font-weight: 800; font-family: 'Orbitron'; width: 100%; cursor: pointer; }
-        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #222; font-size: 12px; }
+        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #222; font-size: 13px; }
 
-        /* MT STATUS TAG */
+        /* MISC */
         .mt-status { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 10px; font-family: 'Orbitron'; margin-bottom: 10px; }
-        .status-on { background: var(--danger); color: white; }
-        .status-off { background: var(--success); color: white; }
-
+        .status-on { background: var(--danger); }
+        .status-off { background: var(--success); }
         #popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; }
         .loader { width: 40px; height: 40px; border: 3px solid #111; border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -74,6 +80,7 @@
 
     <div id="app-container">
         <div id="side-menu">
+            <div style="text-align: right;"><i class="fa-solid fa-xmark" style="font-size: 24px; cursor: pointer;" onclick="toggleMenu(false)"></i></div>
             <div class="profile-section">
                 <img id="user-avatar" src="" class="profile-pic">
                 <h4 id="user-name" style="font-family:'Orbitron'; font-size:12px; margin-top:10px;">USER</h4>
@@ -90,13 +97,36 @@
         </div>
 
         <div id="view-dashboard" class="view active">
-            <nav style="position:absolute; top:0; width:100%; padding:25px; display:flex; justify-content:space-between; align-items:center;">
+            <nav style="width:100%; padding:25px; display:flex; justify-content:space-between; align-items:center;">
                 <div style="font-family:'Orbitron';">CrokBUG</div>
                 <div onclick="toggleMenu(true)"><i class="fa-solid fa-bars-staggered" style="font-size:24px;"></i></div>
             </nav>
-            <h3 style="font-family:'Orbitron'; margin-bottom:20px;">SYSTEM ACTIVE</h3>
-            <div id="live-broadcast" style="width:85%; padding:15px; background:var(--glass); border-left:3px solid var(--accent); border-radius:8px; font-size:14px;">
-                Connecting to server...
+
+            <div class="slider-3d">
+                <div class="card-3d active" id="card-0">
+                    <i class="fa-brands fa-whatsapp" style="font-size:50px; margin:30px 0; color:var(--accent)"></i>
+                    <h2 style="font-family:'Orbitron';">BUG WA</h2>
+                    <button class="btn-main" style="margin-top:20px;" onclick="openFeature('BUG WA')">SELECT</button>
+                </div>
+                <div class="card-3d next" id="card-1">
+                    <i class="fa-solid fa-location-dot" style="font-size:50px; margin:30px 0; color:var(--accent)"></i>
+                    <h2 style="font-family:'Orbitron';">TRACK IP</h2>
+                    <button class="btn-main" style="margin-top:20px;" onclick="openFeature('TRACK IP')">SELECT</button>
+                </div>
+                <div class="card-3d prev" id="card-2">
+                    <i class="fa-solid fa-robot" style="font-size:50px; margin:30px 0; color:var(--accent)"></i>
+                    <h2 style="font-family:'Orbitron';">AI EXPLOIT</h2>
+                    <button class="btn-main" style="margin-top:20px;" onclick="openFeature('AI EXPLOIT')">SELECT</button>
+                </div>
+            </div>
+
+            <div style="display:flex; gap:15px; margin-bottom: 20px;">
+                <button class="btn-main" style="width:50px;" onclick="changeCard(-1)"><</button>
+                <button class="btn-main" style="width:50px;" onclick="changeCard(1)">></button>
+            </div>
+
+            <div id="live-broadcast" style="width:85%; padding:15px; background:var(--glass); border-left:3px solid var(--accent); border-radius:8px; font-size:13px;">
+                Connecting...
             </div>
         </div>
 
@@ -104,37 +134,26 @@
             <h2 style="font-family:'Orbitron'; color:var(--admin); margin-bottom:20px;">ADMIN PANEL</h2>
             
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron';">MAINTENANCE SYSTEM</label><br>
+                <label style="font-size:10px; font-family:'Orbitron';">SERVER MAINTENANCE</label><br>
                 <div id="mt-status-display" class="mt-status status-off">OFF</div>
                 <button class="btn-main" style="background:white; color:black; height:35px; font-size:11px;" onclick="toggleMaintenance()">TOGGLE MT MODE</button>
             </div>
 
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron';">BROADCAST MESSAGE</label>
-                <input type="text" id="bc-input" class="admin-input" placeholder="Update news...">
-                <button class="btn-main" style="background:var(--admin); margin-top:10px; height:40px;" onclick="sendBc()">SEND</button>
-            </div>
-
-            <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron'; color:var(--success);">USERS ONLINE</label>
-                <div id="online-users" style="margin-top:10px; max-height:100px; overflow-y:auto;"></div>
-            </div>
-
-            <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron';">WHITELIST ACCESS</label>
+                <label style="font-size:10px; font-family:'Orbitron';">WHITELIST (ADD & DELETE)</label>
                 <input type="text" id="wl-input" class="admin-input" placeholder="email@gmail.com">
-                <button class="btn-main" style="margin-top:10px; height:40px;" onclick="addWl()">ADD EMAIL</button>
-                <div id="wl-list" style="margin-top:15px; border-top:1px solid #222;"></div>
+                <button class="btn-main" style="margin-top:10px; height:40px;" onclick="addWl()">ADD ACCESS</button>
+                <div id="wl-list" style="margin-top:15px; border-top:1px solid #333;"></div>
             </div>
-            
+
             <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; margin-bottom:40px;">BACK</button>
         </div>
 
-        <div id="view-setting" class="view">
-            <h2 style="font-family:'Orbitron';">SETTINGS</h2>
+        <div id="view-feature" class="view">
+            <h2 id="feat-title" style="font-family:'Orbitron'; color:var(--accent);">FEATURE</h2>
             <div class="admin-card">
-                <input type="file" id="photo-input" accept="image/*" class="admin-input">
-                <button class="btn-main" style="margin-top:10px;" onclick="savePhoto()">SAVE PHOTO</button>
+                <input type="text" id="target" class="admin-input" placeholder="Target Number/IP...">
+                <button class="btn-main" style="margin-top:20px;" onclick="execute()">EXECUTE</button>
             </div>
             <button onclick="showView('dashboard')" style="background:none; border:none; color:#555;">BACK</button>
         </div>
@@ -154,28 +173,20 @@
         const auth = firebase.auth(); const db = firebase.database();
         const OWNER = "rizalxtt2@gmail.com";
         let isMT = false;
+        let currentPos = 0;
 
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             auth.signInWithPopup(provider).then(res => {
                 const user = res.user;
-                // 1. CEK MAINTENANCE MODE DULU
                 db.ref('system/maintenance').once('value', s => {
-                    const mtActive = s.val();
-                    if(mtActive && user.email !== OWNER) {
-                        alert("Sistem Sedang Maintenance! Coba lagi nanti.");
-                        auth.signOut();
-                        return;
+                    if(s.val() && user.email !== OWNER) {
+                        alert("Maintenance!"); auth.signOut(); return;
                     }
-                    // 2. CEK WHITELIST
                     db.ref('whitelist').once('value', sw => {
                         const list = sw.val() ? Object.values(sw.val()) : [];
-                        if(user.email === OWNER || list.includes(user.email)) {
-                            start(user);
-                        } else {
-                            alert("Akses Ditolak! Email tidak terdaftar.");
-                            auth.signOut();
-                        }
+                        if(user.email === OWNER || list.includes(user.email)) start(user);
+                        else { alert("No Access!"); auth.signOut(); }
                     });
                 });
             });
@@ -185,36 +196,20 @@
             document.getElementById('login-screen').style.display='none';
             document.getElementById('app-container').style.display='block';
             document.getElementById('user-name').innerText = user.displayName;
-            
-            const saved = localStorage.getItem('upic');
-            document.getElementById('user-avatar').src = saved || user.photoURL;
+            document.getElementById('user-avatar').src = localStorage.getItem('upic') || user.photoURL;
 
-            // Online Tracking
             db.ref('online/' + user.uid).set({ email: user.email });
             db.ref('online/' + user.uid).onDisconnect().remove();
 
-            // PENGAMANAN REAL-TIME (Anti-Tembus)
             if(user.email !== OWNER) {
-                // Kick jika email dihapus dari whitelist
                 db.ref('whitelist').on('value', s => {
                     const list = s.val() ? Object.values(s.val()) : [];
-                    if(!list.includes(user.email)) {
-                        alert("Akses Anda dicabut oleh Admin!");
-                        logout();
-                    }
+                    if(!list.includes(user.email)) logout();
                 });
-                // Kick jika Maintenance diaktifkan
-                db.ref('system/maintenance').on('value', s => {
-                    if(s.val() === true) {
-                        alert("Server memasuki mode Maintenance!");
-                        logout();
-                    }
-                });
+                db.ref('system/maintenance').on('value', s => { if(s.val()) logout(); });
             }
 
-            // Live BC
-            db.ref('system/bc').on('value', s => document.getElementById('live-broadcast').innerText = s.val() || "No Updates.");
-
+            db.ref('system/bc').on('value', s => document.getElementById('live-broadcast').innerText = s.val() || "Operational.");
             if(user.email === OWNER) {
                 document.getElementById('admin-link').style.display='flex';
                 initAdmin();
@@ -222,22 +217,13 @@
         }
 
         function initAdmin() {
-            // Monitor MT Status
             db.ref('system/maintenance').on('value', s => {
                 isMT = s.val() || false;
                 const el = document.getElementById('mt-status-display');
-                el.innerText = isMT ? "ON (PRIVATE MODE)" : "OFF (PUBLIC MODE)";
+                el.innerText = isMT ? "ON" : "OFF";
                 el.className = isMT ? "mt-status status-on" : "mt-status status-off";
             });
 
-            // Monitor Users Online
-            db.ref('online').on('value', s => {
-                const u = s.val() || {}; const b = document.getElementById('online-users');
-                b.innerHTML = "";
-                for(let id in u) b.innerHTML += `<div class="user-row"><span><i class="fa-solid fa-circle" style="color:var(--success); font-size:7px;"></i> ${u[id].email}</span></div>`;
-            });
-
-            // Whitelist Management (Lengkap dengan Delete)
             db.ref('whitelist').on('value', s => {
                 const l = s.val() || {}; const b = document.getElementById('wl-list');
                 b.innerHTML = "";
@@ -245,39 +231,49 @@
                     b.innerHTML += `
                     <div class="user-row">
                         <span>${l[id]}</span>
-                        <i class="fa-solid fa-trash-can" style="color:var(--danger); cursor:pointer; padding:5px;" onclick="delWl('${id}')"></i>
+                        <i class="fa-solid fa-trash-can" style="color:var(--danger); cursor:pointer;" onclick="delWl('${id}')"></i>
                     </div>`;
                 }
             });
         }
 
-        function toggleMaintenance() { db.ref('system/maintenance').set(!isMT); pushNotif("MT Mode Updated!"); }
-        function sendBc() { db.ref('system/bc').set(document.getElementById('bc-input').value); pushNotif("BC Sent!"); }
+        function toggleMaintenance() { db.ref('system/maintenance').set(!isMT); }
         function addWl() { 
-            const mail = document.getElementById('wl-input').value.toLowerCase().trim();
-            if(mail) {
-                db.ref('whitelist').push(mail); 
-                document.getElementById('wl-input').value = "";
-                pushNotif("Access Added!");
-            }
+            const m = document.getElementById('wl-input').value.toLowerCase().trim();
+            if(m) { db.ref('whitelist').push(m); document.getElementById('wl-input').value=""; pushNotif("Added!"); }
         }
-        function delWl(key) {
-            if(confirm("Hapus akses email ini secara permanen?")) {
-                db.ref('whitelist/' + key).remove();
-                pushNotif("User Banned/Deleted!");
-            }
+        function delWl(id) { if(confirm("Hapus akses?")) db.ref('whitelist/' + id).remove(); }
+
+        function showView(id) { 
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); 
+            document.getElementById('view-'+id).classList.add('active'); 
+            toggleMenu(false); 
         }
 
-        function savePhoto() {
-            const f = document.getElementById('photo-input').files[0];
-            if(!f) return;
-            const r = new FileReader();
-            r.onload = (e) => { localStorage.setItem('upic', e.target.result); document.getElementById('user-avatar').src = e.target.result; pushNotif("Saved!"); };
-            r.readAsDataURL(f);
-        }
-
-        function showView(id) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById('view-'+id).classList.add('active'); toggleMenu(false); }
         function toggleMenu(s) { document.getElementById('side-menu').classList.toggle('active', s); }
+
+        function changeCard(d) {
+            currentPos = (currentPos + d + 3) % 3;
+            const cards = [document.getElementById('card-0'), document.getElementById('card-1'), document.getElementById('card-2')];
+            cards.forEach((c, i) => {
+                c.className = 'card-3d';
+                if(i === currentPos) c.classList.add('active');
+                else if(i === (currentPos + 1) % 3) c.classList.add('next');
+                else c.classList.add('prev');
+            });
+        }
+
+        function openFeature(n) { showView('feature'); document.getElementById('feat-title').innerText = n; }
+
+        function execute() {
+            const o = document.getElementById('popup-overlay'); o.style.display='flex';
+            let p = 0;
+            const i = setInterval(() => {
+                p += 10; document.getElementById('pct').innerText = p+"%";
+                if(p >= 100) { clearInterval(i); o.style.display='none'; pushNotif("Success!"); showView('dashboard'); }
+            }, 100);
+        }
+
         function logout() { auth.signOut(); location.reload(); }
         function pushNotif(m) {
             const b = document.getElementById('notification-box'); const t = document.createElement('div');

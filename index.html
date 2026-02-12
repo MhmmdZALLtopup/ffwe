@@ -42,24 +42,19 @@
         .menu-item { padding: 15px; border-radius: 12px; font-family: 'Orbitron'; font-size: 12px; background: var(--glass); display: flex; align-items: center; gap: 15px; cursor: pointer; }
 
         /* VIEW */
-        .view { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 90px; overflow-y: auto; }
+        .view { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 90px; overflow-y: auto; padding-bottom: 50px;}
         .view.active { display: flex; }
 
-        /* CAROUSEL */
-        .slider-3d { position: relative; width: 280px; height: 350px; transform-style: preserve-3d; transition: 0.6s; margin-top: 20px; }
-        .card-3d { position: absolute; width: 100%; height: 100%; background: rgba(20, 20, 25, 0.98); border-radius: 20px; padding: 25px; text-align: center; border: 1px solid rgba(255,255,255,0.1); transition: 0.6s; backface-visibility: hidden; }
-        .card-3d.active { transform: translateX(0) scale(1); opacity: 1; z-index: 10; border-color: var(--accent); }
-        .card-3d.next { transform: translateX(105%) scale(0.8) rotateY(-30deg); opacity: 0.2; }
-        .card-3d.prev { transform: translateX(-105%) scale(0.8) rotateY(30deg); opacity: 0.2; }
-
-        /* ADMIN CARD */
+        /* ADMIN CARD & COMPONENTS */
         .admin-card { width: 90%; background: var(--glass); border: 1px solid #333; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
         .admin-input { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; outline: none; margin-top: 8px; }
         .btn-main { background: var(--accent); color: #000; border: none; padding: 15px 0; border-radius: 40px; font-weight: 800; font-family: 'Orbitron'; width: 100%; cursor: pointer; }
         .user-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #222; font-size: 12px; }
 
-        /* BC BOX */
-        .bc-display { width: 85%; padding: 12px; background: var(--glass); border-left: 3px solid var(--accent); border-radius: 8px; margin-top: 20px; font-size: 13px; }
+        /* MT TOGGLE */
+        .mt-status { font-family: 'Orbitron'; font-size: 10px; padding: 5px 10px; border-radius: 5px; margin-top: 5px; display: inline-block; }
+        .mt-on { background: var(--danger); color: white; }
+        .mt-off { background: var(--success); color: white; }
 
         #popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; }
         .loader { width: 40px; height: 40px; border: 3px solid #111; border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
@@ -97,89 +92,47 @@
         <div id="view-dashboard" class="view active">
             <nav style="position:absolute; top:0; width:100%; padding:25px; display:flex; justify-content:space-between; align-items:center;">
                 <div style="font-family:'Orbitron';">CrokBUG</div>
-                <div onclick="toggleMenu()"><i class="fa-solid fa-bars-staggered" style="font-size:24px;"></i></div>
+                <div onclick="toggleMenu(true)"><i class="fa-solid fa-bars-staggered" style="font-size:24px;"></i></div>
             </nav>
-
-            <div class="slider-3d">
-                <div class="card-3d active" id="card-0">
-                    <i class="fa-brands fa-whatsapp" style="font-size:50px; margin:40px 0; color:var(--accent)"></i>
-                    <h2 style="font-family:'Orbitron';">BUG WA</h2>
-                    <button class="btn-main" style="margin-top:20px;" onclick="openFeature('BUG WA')">SELECT</button>
-                </div>
-                <div class="card-3d next" id="card-1">
-                    <i class="fa-solid fa-location-dot" style="font-size:50px; margin:40px 0; color:var(--accent)"></i>
-                    <h2 style="font-family:'Orbitron';">TRACK IP</h2>
-                    <button class="btn-main" style="margin-top:20px;" onclick="openFeature('TRACK IP')">SELECT</button>
-                </div>
-                <div class="card-3d prev" id="card-2">
-                    <i class="fa-solid fa-robot" style="font-size:50px; margin:40px 0; color:var(--accent)"></i>
-                    <h2 style="font-family:'Orbitron';">AI EXPLOIT</h2>
-                    <button class="btn-main" style="margin-top:20px;" onclick="openFeature('AI EXPLOIT')">SELECT</button>
-                </div>
-            </div>
-
-            <div class="bc-display">
-                <small style="color:var(--accent); font-family:'Orbitron'; font-size:9px;">BROADCAST:</small>
-                <p id="live-broadcast">Operational...</p>
-            </div>
-
-            <div style="margin-top:30px; display:flex; gap:15px;">
-                <button class="btn-main" style="width:50px;" onclick="changeCard(-1)"><</button>
-                <button class="btn-main" style="width:50px;" onclick="changeCard(1)">></button>
-            </div>
+            <div style="margin-top:20px; font-family:'Orbitron'; color:var(--accent);">WELCOME AGENT</div>
+            <p id="live-broadcast" style="width:80%; margin-top:20px; padding:10px; background:var(--glass); border-left:3px solid var(--accent);">Waiting...</p>
         </div>
 
         <div id="view-admin" class="view">
             <h2 style="font-family:'Orbitron'; color:var(--admin); margin-bottom:20px;">ADMIN PANEL</h2>
             
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron';">BROADCAST MESSAGE</label>
-                <input type="text" id="bc-input" class="admin-input" placeholder="Tulis pesan...">
-                <button class="btn-main" style="background:var(--admin); margin-top:10px;" onclick="sendBc()">SEND BROADCAST</button>
+                <label style="font-size:10px; font-family:'Orbitron';">SYSTEM MAINTENANCE</label><br>
+                <div id="mt-label" class="mt-status mt-off">LOADING...</div>
+                <button class="btn-main" style="background:white; color:black; height:35px; margin-top:10px; font-size:10px;" onclick="toggleMT()">TOGGLE MT MODE</button>
             </div>
 
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron'; color:var(--success);">USERS ONLINE</label>
+                <label style="font-size:10px; font-family:'Orbitron';">BROADCAST</label>
+                <input type="text" id="bc-input" class="admin-input" placeholder="Tulis pesan...">
+                <button class="btn-main" style="background:var(--admin); margin-top:10px; height:40px;" onclick="sendBc()">SEND</button>
+            </div>
+
+            <div class="admin-card">
+                <label style="font-size:10px; font-family:'Orbitron'; color:var(--success);">LIVE ONLINE</label>
                 <div id="online-users" style="margin-top:10px; max-height:80px; overflow-y:auto;"></div>
             </div>
 
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron';">WHITELIST ACCESS</label>
+                <label style="font-size:10px; font-family:'Orbitron';">MANAGE WHITELIST</label>
                 <input type="text" id="wl-input" class="admin-input" placeholder="email@gmail.com">
-                <button class="btn-main" style="margin-top:10px;" onclick="addWl()">ADD EMAIL</button>
-                <div id="wl-list" style="margin-top:15px;"></div>
+                <button class="btn-main" style="margin-top:10px; height:40px;" onclick="addWl()">ADD ACCESS</button>
+                <div id="wl-list" style="margin-top:15px; border-top:1px solid #333;"></div>
             </div>
             
-            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; margin-bottom:40px;">BACK</button>
+            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; margin-bottom:40px;">CLOSE ADMIN</button>
         </div>
 
         <div id="view-setting" class="view">
             <h2 style="font-family:'Orbitron';">SETTINGS</h2>
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron';">CHANGE PROFILE PHOTO</label>
                 <input type="file" id="photo-input" accept="image/*" class="admin-input">
                 <button class="btn-main" style="margin-top:10px;" onclick="savePhoto()">SAVE PHOTO</button>
-            </div>
-            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555;">BACK</button>
-        </div>
-
-        <div id="view-rules" class="view">
-            <h2 style="font-family:'Orbitron';">RULES</h2>
-            <div class="admin-card" style="font-size:13px;">
-                1. No Spamming Engine.<br>
-                2. No Resell Access.<br>
-                3. Rizal/ARDS is not responsible for any damage.<br>
-                4. Respect the system.
-            </div>
-            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555;">I AGREE</button>
-        </div>
-
-        <div id="view-feature" class="view">
-            <h2 id="feat-title" style="font-family:'Orbitron'; color:var(--accent);">FEATURE</h2>
-            <div class="admin-card">
-                <input type="text" id="target" class="admin-input" placeholder="Target Number/IP...">
-                <select id="meth" class="admin-input"><option>Crash V1</option><option>Lag Hard</option></select>
-                <button class="btn-main" style="margin-top:20px;" onclick="execute()">EXECUTE</button>
             </div>
             <button onclick="showView('dashboard')" style="background:none; border:none; color:#555;">BACK</button>
         </div>
@@ -199,15 +152,30 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(); const db = firebase.database();
         const OWNER = "rizalxtt2@gmail.com";
-        let currentPos = 0;
+        let isMT = false;
 
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             auth.signInWithPopup(provider).then(res => {
-                db.ref('whitelist').once('value', s => {
-                    const list = Object.values(s.val() || {});
-                    if(res.user.email === OWNER || list.includes(res.user.email)) start(res.user);
-                    else { alert("No Access!"); auth.signOut(); }
+                const user = res.user;
+                // CEK MAINTENANCE DULU
+                db.ref('system/maintenance').once('value', s => {
+                    const mtStatus = s.val();
+                    if(mtStatus && user.email !== OWNER) {
+                        alert("Sistem sedang Maintenance (MT)!");
+                        auth.signOut();
+                        return;
+                    }
+                    // CEK WHITELIST
+                    db.ref('whitelist').once('value', sw => {
+                        const list = Object.values(sw.val() || {});
+                        if(user.email === OWNER || list.includes(user.email)) {
+                            start(user);
+                        } else {
+                            alert("Akses Ditolak! Email tidak terdaftar.");
+                            auth.signOut();
+                        }
+                    });
                 });
             });
         }
@@ -217,13 +185,31 @@
             document.getElementById('app-container').style.display='block';
             document.getElementById('user-name').innerText = user.displayName;
             
-            // Photo Logic
             const saved = localStorage.getItem('upic');
             document.getElementById('user-avatar').src = saved || user.photoURL;
 
-            // Online & BC
+            // Live Tracking Online
             db.ref('online/' + user.uid).set({ email: user.email });
             db.ref('online/' + user.uid).onDisconnect().remove();
+
+            // Pengecekan Real-time (Kalau email dihapus admin pas lagi pake web)
+            if(user.email !== OWNER) {
+                db.ref('whitelist').on('value', s => {
+                    const list = Object.values(s.val() || {});
+                    if(!list.includes(user.email)) {
+                        alert("Akses Anda telah dicabut oleh Admin!");
+                        logout();
+                    }
+                });
+                // Cek MT Real-time
+                db.ref('system/maintenance').on('value', s => {
+                    if(s.val() === true) {
+                        alert("Sistem memasuki mode Maintenance!");
+                        logout();
+                    }
+                });
+            }
+
             db.ref('system/bc').on('value', s => document.getElementById('live-broadcast').innerText = s.val() || "Operational.");
 
             if(user.email === OWNER) {
@@ -233,21 +219,48 @@
         }
 
         function initAdmin() {
+            // Monitor MT Status
+            db.ref('system/maintenance').on('value', s => {
+                isMT = s.val();
+                const label = document.getElementById('mt-label');
+                label.innerText = isMT ? "MT MODE: ON (PRIVATE)" : "MT MODE: OFF (PUBLIC)";
+                label.className = isMT ? "mt-status mt-on" : "mt-status mt-off";
+            });
+
+            // Monitor Users Online
             db.ref('online').on('value', s => {
                 const u = s.val() || {}; const b = document.getElementById('online-users');
                 b.innerHTML = "";
                 for(let id in u) b.innerHTML += `<div class="user-row"><i class="fa-solid fa-circle" style="color:var(--success); font-size:7px;"></i> ${u[id].email}</div>`;
             });
+
+            // Monitor Whitelist & Delete Feature
             db.ref('whitelist').on('value', s => {
                 const l = s.val() || {}; const b = document.getElementById('wl-list');
                 b.innerHTML = "";
-                for(let id in l) b.innerHTML += `<div class="user-row">${l[id]} <i class="fa-solid fa-trash" style="color:var(--danger)" onclick="delWl('${id}')"></i></div>`;
+                for(let id in l) {
+                    b.innerHTML += `
+                    <div class="user-row">
+                        <span>${l[id]}</span>
+                        <i class="fa-solid fa-trash-can" style="color:var(--danger); cursor:pointer; padding:5px;" onclick="delWl('${id}')"></i>
+                    </div>`;
+                }
             });
         }
 
-        function sendBc() { db.ref('system/bc').set(document.getElementById('bc-input').value); pushNotif("Broadcast Sent!"); }
-        function addWl() { db.ref('whitelist').push(document.getElementById('wl-input').value); pushNotif("Added!"); }
-        function delWl(id) { db.ref('whitelist/' + id).remove(); pushNotif("Deleted!"); }
+        function toggleMT() { db.ref('system/maintenance').set(!isMT); pushNotif("Maintenance Toggled!"); }
+        function sendBc() { db.ref('system/bc').set(document.getElementById('bc-input').value); pushNotif("BC Sent!"); }
+        function addWl() { 
+            const mail = document.getElementById('wl-input').value.toLowerCase().trim();
+            if(mail) db.ref('whitelist').push(mail); 
+            document.getElementById('wl-input').value = "";
+        }
+        function delWl(id) { 
+            if(confirm("Hapus akses email ini?")) {
+                db.ref('whitelist/' + id).remove(); 
+                pushNotif("User Access Deleted!");
+            }
+        }
 
         function savePhoto() {
             const f = document.getElementById('photo-input').files[0];
@@ -257,31 +270,8 @@
             r.readAsDataURL(f);
         }
 
-        function execute() {
-            const t = document.getElementById('target').value;
-            if(!t || t.trim() === "") return pushNotif("FILL TARGET!");
-            
-            const o = document.getElementById('popup-overlay'); o.style.display='flex';
-            let p = 0;
-            const i = setInterval(() => {
-                p += 10; document.getElementById('pct').innerText = p+"%";
-                if(p >= 100) { clearInterval(i); o.style.display='none'; pushNotif("Success!"); showView('dashboard'); }
-            }, 100);
-        }
-
         function showView(id) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById('view-'+id).classList.add('active'); toggleMenu(false); }
         function toggleMenu(s) { document.getElementById('side-menu').classList.toggle('active', s); }
-        function openFeature(n) { showView('feature'); document.getElementById('feat-title').innerText = n; }
-        function changeCard(d) {
-            currentPos = (currentPos + d + 3) % 3;
-            const cards = [document.getElementById('card-0'), document.getElementById('card-1'), document.getElementById('card-2')];
-            cards.forEach((c, i) => {
-                c.className = 'card-3d';
-                if(i === currentPos) c.classList.add('active');
-                else if(i === (currentPos + 1) % 3) c.classList.add('next');
-                else c.classList.add('prev');
-            });
-        }
         function logout() { auth.signOut(); location.reload(); }
         function pushNotif(m) {
             const b = document.getElementById('notification-box'); const t = document.createElement('div');

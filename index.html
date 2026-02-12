@@ -33,9 +33,9 @@
 
         /* NAVBAR MELEKAT KE ATAS */
         nav { 
-            position: absolute; top: 0; left: 0; width: 100%; 
-            padding: 20px 25px; display: flex; justify-content: space-between; 
-            align-items: center; z-index: 1500;
+            position: fixed; top: 0; left: 0; width: 100%; 
+            padding: 15px 25px; display: flex; justify-content: space-between; 
+            align-items: center; z-index: 1500; background: rgba(5,5,7,0.8); backdrop-filter: blur(10px);
         }
 
         /* SIDE MENU */
@@ -63,9 +63,7 @@
         /* COMPONENTS */
         .admin-card { width: 92%; background: var(--glass); border: 1px solid #333; padding: 18px; border-radius: 15px; margin-bottom: 15px; }
         .admin-input, .admin-select { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; outline: none; margin-top: 10px; font-size: 14px; }
-        .admin-select { cursor: pointer; border-color: var(--accent); }
         .btn-main { background: var(--accent); color: #000; border: none; padding: 15px 0; border-radius: 40px; font-weight: 800; font-family: 'Orbitron'; width: 100%; cursor: pointer; transition: 0.3s; }
-        .btn-main:active { transform: scale(0.95); opacity: 0.8; }
         
         .mt-status { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 10px; font-family: 'Orbitron'; margin-bottom: 10px; }
         .status-on { background: var(--danger); }
@@ -84,7 +82,7 @@
     <div id="login-screen">
         <div style="width:60px; height:60px; background:var(--accent); border-radius:15px; transform:rotate(45deg); margin-bottom:30px; box-shadow: 0 0 30px var(--accent);"></div>
         <h1 style="font-family:'Orbitron'; margin-bottom:10px; letter-spacing:5px;">CrokBUG</h1>
-        <p style="color:#666; font-size:12px; margin-bottom:40px; font-family:'Orbitron';">RIZAL/ARDS ULTIMATE</p>
+        <p id="auth-info" style="color:#666; font-size:12px; margin-bottom:40px; font-family:'Orbitron'; text-align:center;">RIZAL/ARDS ULTIMATE<br><span id="status-msg">Silahkan Login</span></p>
         <button class="btn-google" onclick="loginWithGoogle()">
             <i class="fa-brands fa-google" style="margin-right:10px;"></i> SIGN IN GMAIL
         </button>
@@ -95,7 +93,7 @@
 
     <div id="app-container">
         <nav>
-            <div style="font-family:'Orbitron'; font-weight:700; font-size:18px; color:var(--accent); text-shadow: 0 0 10px rgba(219,219,255,0.5);">CrokBUG</div>
+            <div style="font-family:'Orbitron'; font-weight:700; font-size:18px; color:var(--accent);">CrokBUG</div>
             <div onclick="toggleMenu(true)"><i class="fa-solid fa-bars-staggered" style="font-size:24px; cursor:pointer;"></i></div>
         </nav>
 
@@ -109,11 +107,8 @@
             <div id="admin-link" class="menu-item" style="display:none; color:var(--admin); border:1px solid var(--admin);" onclick="showView('admin')">
                 <i class="fa-solid fa-user-shield"></i> ADMIN PANEL
             </div>
-            <div class="menu-item" onclick="pushNotif('Feature Locked')"><i class="fa-solid fa-gear"></i> SETTINGS</div>
-            <div class="menu-item" onclick="pushNotif('Rules: No Spam!')"><i class="fa-solid fa-shield"></i> RULES</div>
-            <div class="menu-item" style="color:var(--danger); margin-top:auto;" onclick="logout()">
-                <i class="fa-solid fa-power-off"></i> LOGOUT
-            </div>
+            <div class="menu-item" onclick="pushNotif('Vip Only')"><i class="fa-solid fa-gear"></i> SETTINGS</div>
+            <div class="menu-item" onclick="logout()" style="color:var(--danger); margin-top:auto;"><i class="fa-solid fa-power-off"></i> LOGOUT</div>
         </div>
 
         <div id="view-dashboard" class="view active">
@@ -144,14 +139,12 @@
                     <button class="btn-main" style="margin-top:25px;" onclick="selectBug('CLOUD CRASH')">SELECT BUG</button>
                 </div>
             </div>
-
             <div style="display:flex; gap:20px; margin-bottom: 25px;">
                 <button class="btn-main" style="width:60px;" onclick="changeCard(-1)"><i class="fa-solid fa-chevron-left"></i></button>
                 <button class="btn-main" style="width:60px;" onclick="changeCard(1)"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
-
             <div id="live-broadcast" style="width:85%; padding:15px; background:var(--glass); border-left:4px solid var(--accent); border-radius:10px; font-size:13px; color:var(--success); font-family:'Orbitron';">
-                System Online...
+                Menghubungkan ke sistem...
             </div>
         </div>
 
@@ -159,42 +152,38 @@
             <h2 style="font-family:'Orbitron'; color:var(--accent); margin-bottom:20px;">SYSTEM EXECUTION</h2>
             <div class="admin-card">
                 <p style="font-size: 10px; color: var(--admin); font-family: 'Orbitron';">CAT: <span id="selected-bug-name">NONE</span></p>
-                
-                <label style="display:block; margin-top:15px; font-size:11px; font-family:'Orbitron';">SELECT METHOD:</label>
+                <label style="display:block; margin-top:15px; font-size:11px; font-family:'Orbitron';">PILIH METODE (1-5):</label>
                 <select id="bug-method" class="admin-select">
-                    <option value="Turbo Injection">1. Turbo Injection (Rapid)</option>
-                    <option value="System Overload">2. System Overload (L7)</option>
-                    <option value="Data Corruptor">3. Data Corruptor (V2)</option>
-                    <option value="Packet Storm">4. Packet Storm (Bypass)</option>
-                    <option value="Final Strike">5. Final Strike (Total Crash)</option>
+                    <option value="Rapid Injection V1">1. Rapid Injection V1</option>
+                    <option value="Overload System V2">2. Overload System V2</option>
+                    <option value="Corrupt Database V3">3. Corrupt Database V3</option>
+                    <option value="Bypass Firewall V4">4. Bypass Firewall V4</option>
+                    <option value="Total Shutdown V5">5. Total Shutdown V5</option>
                 </select>
-
-                <input type="text" id="target" class="admin-input" placeholder="Target Number / IP / URL">
+                <input type="text" id="target" class="admin-input" placeholder="Nomor Target / IP / URL">
                 <button class="btn-main" style="margin-top:25px;" onclick="execute()">EXECUTE NOW</button>
             </div>
-            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; cursor:pointer; font-family:'Orbitron';">BACK TO HOME</button>
+            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; cursor:pointer; font-family:'Orbitron';">KEMBALI</button>
         </div>
 
         <div id="view-admin" class="view">
             <h2 style="font-family:'Orbitron'; color:var(--admin); margin-bottom:20px;">ADMIN CONTROL</h2>
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron';">SERVER STATUS</label><br>
+                <label style="font-size:10px; font-family:'Orbitron';">SERVER MAINTENANCE</label><br>
                 <div id="mt-status-display" class="mt-status status-off">OFF</div>
-                <button class="btn-main" style="background:white; color:black; height:35px; font-size:11px;" onclick="toggleMaintenance()">TOGGLE MT MODE</button>
-                <input type="text" id="bc-input" class="admin-input" placeholder="Update message...">
-                <button class="btn-main" style="margin-top:10px; height:40px; background:var(--admin);" onclick="sendBc()">SEND BC</button>
+                <button class="btn-main" style="background:white; color:black; height:35px; font-size:11px;" onclick="toggleMaintenance()">GANTI STATUS</button>
+                <input type="text" id="bc-input" class="admin-input" placeholder="Pesan Broadcast...">
+                <button class="btn-main" style="margin-top:10px; background:var(--admin);" onclick="sendBc()">UPDATE BC</button>
             </div>
-
+            <div class="admin-card">
+                <label style="font-size:10px; font-family:'Orbitron';">WHITELIST EMAIL</label>
+                <input type="text" id="wl-input" class="admin-input" placeholder="email@gmail.com">
+                <button class="btn-main" onclick="addWl()">TAMBAH AKSES</button>
+                <div id="wl-list" style="margin-top:15px; max-height: 150px; overflow-y: auto;"></div>
+            </div>
             <div class="admin-card">
                 <label style="font-size:10px; font-family:'Orbitron'; color:var(--success);">USERS ONLINE</label>
                 <div id="online-list" style="margin-top:10px; font-size: 12px; color: #ccc;"></div>
-            </div>
-
-            <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron';">WHITELIST ACCESS</label>
-                <input type="text" id="wl-input" class="admin-input" placeholder="email@gmail.com">
-                <button class="btn-main" style="margin-top:10px; height:40px;" onclick="addWl()">ADD USER</button>
-                <div id="wl-list" style="margin-top:15px; border-top:1px solid #333;"></div>
             </div>
             <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; margin-bottom:40px;">BACK</button>
         </div>
@@ -213,38 +202,50 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth(); const db = firebase.database();
         const OWNER = "rizalxtt2@gmail.com";
-        let isMT = false;
-        let currentPos = 0;
-        let activeBug = "";
+        let isMT = false; let currentPos = 0;
 
-        // AUTH FUNCTIONS
+        // AUTH: Pakai Redirect biar lancar di HP
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider).then(res => {
-                const user = res.user;
-                db.ref('system/maintenance').once('value', s => {
-                    if(s.val() && user.email !== OWNER) {
-                        alert("Server Maintenance!"); auth.signOut(); return;
-                    }
-                    db.ref('whitelist').once('value', sw => {
-                        const list = sw.val() ? Object.values(sw.val()) : [];
-                        if(user.email === OWNER || list.includes(user.email)) start(user);
-                        else { alert("Access Denied! Contact Admin."); auth.signOut(); }
-                    });
-                });
-            }).catch(e => pushNotif("Login Failed!"));
+            auth.signInWithRedirect(provider);
         }
 
-        function start(user) {
+        auth.getRedirectResult().then(res => {
+            if(res.user) handleUser(res.user);
+        }).catch(e => {
+            document.getElementById('status-msg').innerText = "Login Gagal!";
+        });
+
+        auth.onAuthStateChanged(user => {
+            if(user) handleUser(user);
+            else document.getElementById('status-msg').innerText = "Silahkan Login";
+        });
+
+        function handleUser(user) {
+            db.ref('system/maintenance').once('value', s => {
+                if(s.val() && user.email !== OWNER) {
+                    alert("SERVER SEDANG MAINTENANCE!"); auth.signOut(); return;
+                }
+                db.ref('whitelist').once('value', sw => {
+                    const list = sw.val() ? Object.values(sw.val()) : [];
+                    if(user.email === OWNER || list.includes(user.email)) {
+                        startApp(user);
+                    } else {
+                        alert("EMAIL ANDA TIDAK TERDAFTAR!"); auth.signOut();
+                    }
+                });
+            });
+        }
+
+        function startApp(user) {
             document.getElementById('login-screen').style.display='none';
             document.getElementById('app-container').style.display='block';
-            document.getElementById('user-name').innerText = user.displayName.toUpperCase();
+            document.getElementById('user-name').innerText = user.displayName;
             document.getElementById('user-avatar').src = user.photoURL;
 
             db.ref('online/' + user.uid).set({ email: user.email, name: user.displayName });
             db.ref('online/' + user.uid).onDisconnect().remove();
-
-            db.ref('system/bc').on('value', s => document.getElementById('live-broadcast').innerText = s.val() || "Ready to use.");
+            db.ref('system/bc').on('value', s => document.getElementById('live-broadcast').innerText = s.val() || "System Ready.");
             
             if(user.email === OWNER) {
                 document.getElementById('admin-link').style.display='flex';
@@ -252,10 +253,10 @@
             }
         }
 
-        // ADMIN LOGIC
+        // ADMIN FUNCTIONS
         function initAdmin() {
             db.ref('system/maintenance').on('value', s => {
-                isMT = s.val() || false;
+                isMT = s.val();
                 const el = document.getElementById('mt-status-display');
                 el.innerText = isMT ? "ON" : "OFF";
                 el.className = isMT ? "mt-status status-on" : "mt-status status-off";
@@ -263,9 +264,7 @@
             db.ref('whitelist').on('value', s => {
                 const l = s.val() || {}; const b = document.getElementById('wl-list');
                 b.innerHTML = "";
-                for(let id in l) {
-                    b.innerHTML += `<div class="user-row"><span>${l[id]}</span><i class="fa-solid fa-trash" style="color:var(--danger);" onclick="delWl('${id}')"></i></div>`;
-                }
+                for(let id in l) b.innerHTML += `<div class="user-row">${l[id]} <i class="fa-solid fa-trash" style="color:red;" onclick="delWl('${id}')"></i></div>`;
             });
             db.ref('online').on('value', s => {
                 const list = s.val() || {}; const container = document.getElementById('online-list');
@@ -275,58 +274,52 @@
         }
 
         function toggleMaintenance() { db.ref('system/maintenance').set(!isMT); }
-        function sendBc() { const m = document.getElementById('bc-input').value; if(m){ db.ref('system/bc').set(m); document.getElementById('bc-input').value=""; pushNotif("BC Updated!"); } }
-        function addWl() { const m = document.getElementById('wl-input').value.toLowerCase().trim(); if(m){ db.ref('whitelist').push(m); document.getElementById('wl-input').value=""; pushNotif("User Added!"); } }
-        function delWl(id) { if(confirm("Remove access?")) db.ref('whitelist/' + id).remove(); }
+        function sendBc() { const m = document.getElementById('bc-input').value; if(m){ db.ref('system/bc').set(m); pushNotif("BC Sent!"); } }
+        function addWl() { const m = document.getElementById('wl-input').value; if(m){ db.ref('whitelist').push(m.toLowerCase().trim()); document.getElementById('wl-input').value=""; } }
+        function delWl(id) { db.ref('whitelist/'+id).remove(); }
 
-        // NAVIGATION
+        // NAVIGATION & SLIDER
         function showView(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById('view-'+id).classList.add('active');
             toggleMenu(false);
         }
         function toggleMenu(s) { document.getElementById('side-menu').classList.toggle('active', s); }
-
-        // SLIDER LOGIC
+        
         function changeCard(d) {
             currentPos = (currentPos + d + 5) % 5;
             for(let i=0; i<5; i++) {
                 const c = document.getElementById('card-'+i);
                 c.className = 'card-3d';
                 if(i === currentPos) c.classList.add('active');
-                else if(i === (currentPos + 1) % 5) c.classList.add('next');
-                else if(i === (currentPos - 1 + 5) % 5) c.classList.add('prev');
+                else if(i === (currentPos+1)%5) c.classList.add('next');
+                else if(i === (currentPos-1+5)%5) c.classList.add('prev');
             }
         }
 
-        // EXECUTION LOGIC
         function selectBug(name) {
-            activeBug = name;
             document.getElementById('selected-bug-name').innerText = name;
             showView('feature');
         }
 
         function execute() {
-            const method = document.getElementById('bug-method').value;
             const target = document.getElementById('target').value;
-            if(!target) { pushNotif("Target is empty!"); return; }
-
+            if(!target) return pushNotif("Isi Target!");
             document.getElementById('popup-overlay').style.display='flex';
             let p = 0;
-            const interval = setInterval(() => {
-                p += Math.floor(Math.random() * 15);
-                if(p > 100) p = 100;
+            const iv = setInterval(() => {
+                p += Math.floor(Math.random()*20);
+                if(p>100) p=100;
                 document.getElementById('pct').innerText = p + "%";
-                if(p >= 100) {
-                    clearInterval(interval);
+                if(p==100){
+                    clearInterval(iv);
                     setTimeout(() => {
                         document.getElementById('popup-overlay').style.display='none';
-                        pushNotif("SENT: " + method);
-                        document.getElementById('target').value = "";
+                        pushNotif("Selesai!");
                         showView('dashboard');
-                    }, 800);
+                    }, 500);
                 }
-            }, 200);
+            }, 300);
         }
 
         function pushNotif(m) {

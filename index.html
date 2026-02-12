@@ -17,16 +17,17 @@
             --danger: #ff4757; --success: #2ed573; --admin: #ff9f43;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg); color: white; height: 100vh; overflow: hidden; }
 
         /* NOTIFIKASI */
-        #notification-box { position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; }
-        .toast { background: rgba(10, 10, 15, 0.9); border-left: 4px solid var(--accent); padding: 15px; border-radius: 8px; font-family: 'Orbitron'; font-size: 11px; animation: slideIn 0.3s forwards; }
-        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        #notification-box { position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .toast { background: rgba(10, 10, 15, 0.9); border-left: 4px solid var(--accent); padding: 15px 25px; border-radius: 8px; backdrop-filter: blur(10px); font-family: 'Orbitron'; font-size: 11px; animation: slideIn 0.4s forwards; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-        /* UI COMPONENTS */
-        #app-container { width: 100%; height: 100vh; position: relative; display: none; background: radial-gradient(circle, #10101a, #050507); }
+        #app-container { width: 100%; height: 100vh; position: relative; overflow: hidden; display: none; background: radial-gradient(circle at center, #10101a 0%, #050507 100%); }
+
+        /* NAVBAR & SIDE MENU */
         .navbar { padding: 25px 20px; display: flex; justify-content: space-between; align-items: center; position: absolute; top: 0; width: 100%; z-index: 100; }
         .logo-diamond { width: 30px; height: 30px; background: #fff; transform: rotate(45deg); border-radius: 4px; }
 
@@ -38,37 +39,45 @@
         #side-menu.active { left: 0; }
         .menu-item { padding: 18px; border-radius: 12px; font-family: 'Orbitron'; font-size: 13px; background: var(--glass); display: flex; align-items: center; gap: 15px; cursor: pointer; }
 
-        /* VIEWS */
-        .view { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; padding: 90px 20px 30px; }
+        /* VIEW SYSTEM */
+        .view { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 100px; }
         .view.active { display: flex; }
 
-        /* ADMIN PANEL STYLING */
-        .admin-card { background: var(--glass); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #222; }
-        input[type="text"] { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: white; border-radius: 8px; margin-top: 10px; outline: none; }
-        input[type="text"]:focus { border-color: var(--accent); }
-        .btn-action { width: 100%; padding: 12px; margin-top: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-family: 'Orbitron'; }
-
-        /* LOG BOX */
-        .log-box { height: 150px; overflow-y: auto; background: #000; padding: 10px; border-radius: 8px; font-size: 11px; border: 1px solid #111; }
-        .log-item { margin-bottom: 5px; border-bottom: 1px solid #111; padding-bottom: 5px; }
-
-        /* LOGIN SCREEN */
-        #login-screen { position: fixed; inset: 0; background: #050507; z-index: 20000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .btn-google { background: white; color: black; padding: 15px 30px; border-radius: 50px; font-family: 'Orbitron'; font-weight: bold; border: none; cursor: pointer; display: flex; align-items: center; gap: 10px; }
-
         /* CAROUSEL */
-        .carousel-container { flex: 1; display: flex; align-items: center; justify-content: center; perspective: 1200px; }
-        .slider-3d { position: relative; width: 280px; height: 350px; transform-style: preserve-3d; transition: 0.6s; }
-        .card-3d { position: absolute; width: 100%; height: 100%; background: rgba(20, 20, 25, 0.98); border-radius: 20px; padding: 25px; text-align: center; border: 1px solid #222; transition: 0.6s; }
-        .card-3d.active { opacity: 1; transform: scale(1); z-index: 10; border-color: var(--accent); }
-        .card-3d.next { opacity: 0.2; transform: translateX(100px) scale(0.8); }
-        .card-3d.prev { opacity: 0.2; transform: translateX(-100px) scale(0.8); }
+        .carousel-container { height: 60%; width: 100%; display: flex; align-items: center; justify-content: center; perspective: 1200px; }
+        .slider-3d { position: relative; width: 280px; height: 380px; transform-style: preserve-3d; transition: 0.6s; }
+        .card-3d { position: absolute; width: 100%; height: 100%; background: rgba(20, 20, 25, 0.98); border-radius: 20px; padding: 25px 15px; text-align: center; border: 1px solid #222; transition: 0.6s; backface-visibility: hidden; }
+        .card-3d.active { transform: translateX(0) scale(1); opacity: 1; z-index: 10; border-color: var(--accent); }
+        .card-3d.next { transform: translateX(110%) scale(0.8) rotateY(-30deg); opacity: 0.3; }
+        .card-3d.prev { transform: translateX(-110%) scale(0.8) rotateY(30deg); opacity: 0.3; }
+
+        /* BROADCAST BOX */
+        .status-broadcast { width: 85%; margin-top: 20px; padding: 15px; background: var(--glass); border-radius: 12px; border-left: 3px solid var(--accent); }
+
+        /* ADMIN CARD */
+        .admin-card { width: 90%; background: var(--glass); border: 1px solid #333; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
+        .admin-input { width: 100%; padding: 12px; background: #000; border: 1px solid var(--admin); color: #fff; border-radius: 8px; margin-top: 10px; outline: none; }
+        .btn-admin { width: 100%; padding: 12px; background: var(--admin); border: none; border-radius: 8px; font-family: 'Orbitron'; font-weight: bold; margin-top: 10px; cursor: pointer; }
+
+        /* LOGS */
+        .log-box { width: 100%; height: 150px; overflow-y: auto; background: #000; padding: 10px; font-size: 11px; border-radius: 8px; border: 1px solid #111; margin-top: 10px; }
+        .log-item { border-bottom: 1px solid #111; padding: 5px 0; }
+
+        /* BUTTONS */
+        .btn-open { background: var(--accent); color: #000; border: none; padding: 15px 0; border-radius: 40px; font-weight: 800; font-family: 'Orbitron'; width: 85%; }
+        .nav-footer { margin-top: 20px; display: flex; gap: 20px; }
+        .btn-nav { width: 50px; height: 50px; border-radius: 50%; border: 1px solid #333; background: transparent; color: white; }
+
+        /* LOGIN */
+        #login-screen { position: fixed; inset: 0; background: #050507; z-index: 20000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .btn-google { background: white; color: black; padding: 15px 30px; border-radius: 50px; font-family: 'Orbitron'; font-weight: bold; border: none; display: flex; align-items: center; gap: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div id="login-screen">
-        <div class="logo-diamond" style="margin-bottom: 30px;"></div>
+        <div class="logo-diamond" style="margin-bottom: 20px; width: 50px; height: 50px;"></div>
+        <h1 style="font-family:'Orbitron'; margin-bottom: 30px; letter-spacing: 5px;">CrokBUG</h1>
         <button class="btn-google" onclick="loginWithGoogle()">SIGN IN WITH GMAIL</button>
     </div>
 
@@ -76,7 +85,7 @@
 
     <div id="app-container">
         <div id="side-menu">
-            <div id="admin-link" class="menu-item" style="display:none; color:var(--admin);" onclick="showView('admin')">
+            <div id="admin-link" class="menu-item" style="display:none; color:var(--admin); border: 1px solid var(--admin);" onclick="showView('admin')">
                 <i class="fa-solid fa-user-shield"></i> ADMIN DASHBOARD
             </div>
             <div class="menu-item" onclick="showView('dashboard')"><i class="fa-solid fa-house"></i> DASHBOARD</div>
@@ -88,55 +97,57 @@
         <div id="view-dashboard" class="view active">
             <nav class="navbar">
                 <div class="logo-diamond"></div>
-                <div onclick="toggleMenu()"><i class="fa-solid fa-bars-staggered" style="font-size:24px;"></i></div>
+                <div onclick="toggleMenu()"><i class="fa-solid fa-bars-staggered" style="font-size:22px;"></i></div>
             </nav>
 
             <div class="carousel-container">
                 <div class="slider-3d">
                     <div class="card-3d active" id="card-0">
-                        <i class="fa-brands fa-whatsapp" style="font-size:60px; color:var(--accent); margin: 30px 0;"></i>
-                        <h2 style="font-family:'Orbitron';">BUG WHATSAPP</h2>
-                        <button class="btn-action" style="background:var(--accent); color:black;" onclick="openFeature('BUG WA')">OPEN</button>
+                        <i class="fa-brands fa-whatsapp" style="font-size:50px; margin:40px 0; color:var(--accent)"></i>
+                        <h2 style="font-family:'Orbitron'; margin-bottom:20px;">BUG WA</h2>
+                        <button class="btn-open" onclick="openFeature('BUG WA')">SELECT</button>
                     </div>
                 </div>
             </div>
 
-            <div style="background:var(--glass); padding:15px; border-radius:12px; border-left:4px solid var(--accent);">
-                <small style="color:var(--accent); font-family:'Orbitron'; font-size:10px;">SYSTEM MESSAGE:</small>
-                <p id="system-status-text" style="margin-top:5px; font-weight:bold;">Connecting...</p>
+            <div class="status-broadcast">
+                <small style="font-family:'Orbitron'; color:var(--accent); font-size:9px;">SYSTEM STATUS:</small>
+                <p id="live-status-text" style="font-size:13px; font-weight:bold; margin-top:5px;">Connecting...</p>
             </div>
         </div>
 
         <div id="view-admin" class="view" style="overflow-y: auto;">
-            <h2 style="font-family:'Orbitron'; color:var(--admin); margin-bottom:20px;">ADMIN CONTROL</h2>
-
+            <h2 style="font-family:'Orbitron'; color:var(--admin); margin-bottom:20px;">ADMIN PANEL</h2>
+            
             <div class="admin-card">
-                <label style="font-size:12px; font-family:'Orbitron';">UPDATE SYSTEM BROADCAST</label>
-                <input type="text" id="input-status" placeholder="Masukkan status sistem baru...">
-                <button class="btn-action" style="background:var(--admin);" onclick="updateStatus()">UPDATE BROADCAST</button>
+                <label style="font-size:10px; font-family:'Orbitron';">UPDATE BROADCAST STATUS</label>
+                <input type="text" id="status-input" class="admin-input" placeholder="Tulis status baru...">
+                <button class="btn-admin" onclick="updateSystemStatus()">UPDATE REALTIME</button>
             </div>
 
             <div class="admin-card">
-                <label style="font-size:12px; font-family:'Orbitron';">USER LIST (<span id="count">0</span>)</label>
-                <div id="user-list" style="margin-top:10px; font-size:13px; max-height:100px; overflow-y:auto;">
-                    </div>
+                <label style="font-size:10px; font-family:'Orbitron';">USER ONLINE: <span id="u-count">0</span></label>
+                <div id="admin-user-list" class="log-box" style="height: 80px;"></div>
             </div>
 
             <div class="admin-card">
-                <label style="font-size:12px; font-family:'Orbitron'; color:var(--success);">LIVE ACTIVITY LOGS</label>
-                <div id="admin-logs" class="log-box" style="margin-top:10px;">
-                    </div>
+                <label style="font-size:10px; font-family:'Orbitron'; color:var(--success);">LIVE ACTIVITY LOGS</label>
+                <div id="admin-logs" class="log-box"></div>
             </div>
 
-            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; width:100%; margin-top:20px;">BACK TO DASHBOARD</button>
+            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; margin: 20px 0;">BACK</button>
         </div>
 
         <div id="view-feature" class="view">
-            <h2 id="feat-title" style="font-family:'Orbitron'; color:var(--accent); margin-bottom:20px;">FEATURE</h2>
-            <input type="text" id="targetInput" placeholder="Masukkan Target...">
-            <button class="btn-action" style="background:var(--accent); color:black; margin-top:20px;" onclick="executeAction()">EXECUTE</button>
-            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; margin-top:auto;">RETURN</button>
+            <h2 id="feat-title" style="font-family:'Orbitron'; color:var(--accent); margin-bottom:30px;">FEATURE</h2>
+            <div style="width:85%;">
+                <label style="font-size:11px; opacity:0.5;">TARGET</label>
+                <input type="text" id="targetInput" placeholder="Nomor/IP..." class="admin-input" style="border-color:#333;">
+            </div>
+            <button class="btn-open" style="margin-top:30px;" onclick="executeAction()">EXECUTE</button>
+            <button onclick="showView('dashboard')" style="margin-top:auto; background:none; border:none; color:#555;">RETURN</button>
         </div>
+
     </div>
 
     <script>
@@ -154,10 +165,10 @@
         const auth = firebase.auth();
         const db = firebase.database();
 
-        const OWNER_EMAIL = "rizalards@gmail.com";
+        // EMAIL ADMIN BARU
+        const OWNER_EMAIL = "rizalxtt2@gmail.com";
         let currentUser = null;
 
-        // AUTH LOGIC
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             auth.signInWithPopup(provider);
@@ -171,70 +182,60 @@
                 document.getElementById('login-screen').style.display = 'none';
                 document.getElementById('app-container').style.display = 'block';
                 
-                // Simpan User
                 db.ref('users/' + user.uid).set({ email: user.email, name: user.displayName });
 
-                // Cek Admin
                 if (user.email === OWNER_EMAIL) {
                     document.getElementById('admin-link').style.display = 'flex';
-                    loadAdminData();
+                    initAdminPanel();
                 }
                 
-                loadSystemStatus();
-                pushNotif("Welcome back, " + user.displayName);
+                // Load Realtime Status
+                db.ref('system/status').on('value', s => {
+                    document.getElementById('live-status-text').innerText = s.val() || "System Secured";
+                });
+
+                pushNotif("Welcome, " + user.displayName);
             }
         });
 
-        // SYSTEM STATUS (BROADCAST)
-        function loadSystemStatus() {
-            db.ref('system/status').on('value', s => {
-                document.getElementById('system-status-text').innerText = s.val() || "System Operational";
+        // ADMIN FUNCTIONS
+        function updateSystemStatus() {
+            const txt = document.getElementById('status-input').value;
+            if(!txt) return;
+            db.ref('system/status').set(txt).then(() => {
+                pushNotif("Status Updated!");
+                document.getElementById('status-input').value = "";
             });
         }
 
-        function updateStatus() {
-            const val = document.getElementById('input-status').value;
-            if(!val) return;
-            db.ref('system/status').set(val).then(() => {
-                pushNotif("Broadcast Updated!");
-                document.getElementById('input-status').value = "";
-            });
-        }
-
-        // ADMIN MONITORING
-        function loadAdminData() {
-            // List User
+        function initAdminPanel() {
+            // Monitor Users
             db.ref('users').on('value', s => {
                 const users = s.val();
-                document.getElementById('count').innerText = s.numChildren();
-                const list = document.getElementById('user-list');
+                document.getElementById('u-count').innerText = s.numChildren();
+                const list = document.getElementById('admin-user-list');
                 list.innerHTML = "";
-                for(let id in users) {
-                    list.innerHTML += `<div style="padding:5px 0; border-bottom:1px solid #111;">${users[id].email}</div>`;
-                }
+                for(let id in users) list.innerHTML += `<div>${users[id].email}</div>`;
             });
 
-            // List Logs
-            db.ref('logs').limitToLast(10).on('value', s => {
+            // Monitor Logs
+            db.ref('logs').limitToLast(15).on('value', s => {
                 const logs = s.val();
                 const box = document.getElementById('admin-logs');
                 box.innerHTML = "";
                 for(let id in logs) {
                     const l = logs[id];
-                    box.innerHTML = `<div class="log-item">
-                        <span style="color:var(--admin)">[${l.time}]</span> <b>${l.user}</b>: ${l.feat} -> ${l.target}
-                    </div>` + box.innerHTML;
+                    box.innerHTML = `<div class="log-item"><b>${l.user}</b>: ${l.feat} -> ${l.target}</div>` + box.innerHTML;
                 }
             });
         }
 
-        // EXECUTION
+        // ACTION
         function executeAction() {
             const target = document.getElementById('targetInput').value;
             const feat = document.getElementById('feat-title').innerText;
-            if(!target) return pushNotif("Target Missing!");
+            if(!target) return pushNotif("Input Target!");
 
-            // Kirim Log
             db.ref('logs').push({
                 user: currentUser.email,
                 feat: feat,
@@ -242,11 +243,11 @@
                 time: new Date().toLocaleTimeString()
             });
 
-            pushNotif("Execution Success!");
+            pushNotif("Action Sent!");
             showView('dashboard');
         }
 
-        // UI NAVIGATION
+        // NAVIGATION
         function showView(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById('view-' + id).classList.add('active');

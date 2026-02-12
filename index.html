@@ -42,19 +42,19 @@
         .menu-item { padding: 15px; border-radius: 12px; font-family: 'Orbitron'; font-size: 12px; background: var(--glass); display: flex; align-items: center; gap: 15px; cursor: pointer; }
 
         /* VIEW */
-        .view { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 90px; overflow-y: auto; padding-bottom: 50px;}
+        .view { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 90px; overflow-y: auto; padding-bottom: 40px; }
         .view.active { display: flex; }
 
-        /* ADMIN CARD & COMPONENTS */
+        /* ADMIN COMPONENTS */
         .admin-card { width: 90%; background: var(--glass); border: 1px solid #333; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
         .admin-input { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; outline: none; margin-top: 8px; }
         .btn-main { background: var(--accent); color: #000; border: none; padding: 15px 0; border-radius: 40px; font-weight: 800; font-family: 'Orbitron'; width: 100%; cursor: pointer; }
         .user-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #222; font-size: 12px; }
 
-        /* MT TOGGLE */
-        .mt-status { font-family: 'Orbitron'; font-size: 10px; padding: 5px 10px; border-radius: 5px; margin-top: 5px; display: inline-block; }
-        .mt-on { background: var(--danger); color: white; }
-        .mt-off { background: var(--success); color: white; }
+        /* MT STATUS TAG */
+        .mt-status { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 10px; font-family: 'Orbitron'; margin-bottom: 10px; }
+        .status-on { background: var(--danger); color: white; }
+        .status-off { background: var(--success); color: white; }
 
         #popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; }
         .loader { width: 40px; height: 40px; border: 3px solid #111; border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
@@ -94,38 +94,40 @@
                 <div style="font-family:'Orbitron';">CrokBUG</div>
                 <div onclick="toggleMenu(true)"><i class="fa-solid fa-bars-staggered" style="font-size:24px;"></i></div>
             </nav>
-            <div style="margin-top:20px; font-family:'Orbitron'; color:var(--accent);">WELCOME AGENT</div>
-            <p id="live-broadcast" style="width:80%; margin-top:20px; padding:10px; background:var(--glass); border-left:3px solid var(--accent);">Waiting...</p>
+            <h3 style="font-family:'Orbitron'; margin-bottom:20px;">SYSTEM ACTIVE</h3>
+            <div id="live-broadcast" style="width:85%; padding:15px; background:var(--glass); border-left:3px solid var(--accent); border-radius:8px; font-size:14px;">
+                Connecting to server...
+            </div>
         </div>
 
         <div id="view-admin" class="view">
             <h2 style="font-family:'Orbitron'; color:var(--admin); margin-bottom:20px;">ADMIN PANEL</h2>
             
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron';">SYSTEM MAINTENANCE</label><br>
-                <div id="mt-label" class="mt-status mt-off">LOADING...</div>
-                <button class="btn-main" style="background:white; color:black; height:35px; margin-top:10px; font-size:10px;" onclick="toggleMT()">TOGGLE MT MODE</button>
+                <label style="font-size:10px; font-family:'Orbitron';">MAINTENANCE SYSTEM</label><br>
+                <div id="mt-status-display" class="mt-status status-off">OFF</div>
+                <button class="btn-main" style="background:white; color:black; height:35px; font-size:11px;" onclick="toggleMaintenance()">TOGGLE MT MODE</button>
             </div>
 
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron';">BROADCAST</label>
-                <input type="text" id="bc-input" class="admin-input" placeholder="Tulis pesan...">
+                <label style="font-size:10px; font-family:'Orbitron';">BROADCAST MESSAGE</label>
+                <input type="text" id="bc-input" class="admin-input" placeholder="Update news...">
                 <button class="btn-main" style="background:var(--admin); margin-top:10px; height:40px;" onclick="sendBc()">SEND</button>
             </div>
 
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron'; color:var(--success);">LIVE ONLINE</label>
-                <div id="online-users" style="margin-top:10px; max-height:80px; overflow-y:auto;"></div>
+                <label style="font-size:10px; font-family:'Orbitron'; color:var(--success);">USERS ONLINE</label>
+                <div id="online-users" style="margin-top:10px; max-height:100px; overflow-y:auto;"></div>
             </div>
 
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron';">MANAGE WHITELIST</label>
+                <label style="font-size:10px; font-family:'Orbitron';">WHITELIST ACCESS</label>
                 <input type="text" id="wl-input" class="admin-input" placeholder="email@gmail.com">
-                <button class="btn-main" style="margin-top:10px; height:40px;" onclick="addWl()">ADD ACCESS</button>
-                <div id="wl-list" style="margin-top:15px; border-top:1px solid #333;"></div>
+                <button class="btn-main" style="margin-top:10px; height:40px;" onclick="addWl()">ADD EMAIL</button>
+                <div id="wl-list" style="margin-top:15px; border-top:1px solid #222;"></div>
             </div>
             
-            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; margin-bottom:40px;">CLOSE ADMIN</button>
+            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; margin-bottom:40px;">BACK</button>
         </div>
 
         <div id="view-setting" class="view">
@@ -136,7 +138,6 @@
             </div>
             <button onclick="showView('dashboard')" style="background:none; border:none; color:#555;">BACK</button>
         </div>
-
     </div>
 
     <script>
@@ -158,17 +159,17 @@
             const provider = new firebase.auth.GoogleAuthProvider();
             auth.signInWithPopup(provider).then(res => {
                 const user = res.user;
-                // CEK MAINTENANCE DULU
+                // 1. CEK MAINTENANCE MODE DULU
                 db.ref('system/maintenance').once('value', s => {
-                    const mtStatus = s.val();
-                    if(mtStatus && user.email !== OWNER) {
-                        alert("Sistem sedang Maintenance (MT)!");
+                    const mtActive = s.val();
+                    if(mtActive && user.email !== OWNER) {
+                        alert("Sistem Sedang Maintenance! Coba lagi nanti.");
                         auth.signOut();
                         return;
                     }
-                    // CEK WHITELIST
+                    // 2. CEK WHITELIST
                     db.ref('whitelist').once('value', sw => {
-                        const list = Object.values(sw.val() || {});
+                        const list = sw.val() ? Object.values(sw.val()) : [];
                         if(user.email === OWNER || list.includes(user.email)) {
                             start(user);
                         } else {
@@ -188,29 +189,31 @@
             const saved = localStorage.getItem('upic');
             document.getElementById('user-avatar').src = saved || user.photoURL;
 
-            // Live Tracking Online
+            // Online Tracking
             db.ref('online/' + user.uid).set({ email: user.email });
             db.ref('online/' + user.uid).onDisconnect().remove();
 
-            // Pengecekan Real-time (Kalau email dihapus admin pas lagi pake web)
+            // PENGAMANAN REAL-TIME (Anti-Tembus)
             if(user.email !== OWNER) {
+                // Kick jika email dihapus dari whitelist
                 db.ref('whitelist').on('value', s => {
-                    const list = Object.values(s.val() || {});
+                    const list = s.val() ? Object.values(s.val()) : [];
                     if(!list.includes(user.email)) {
-                        alert("Akses Anda telah dicabut oleh Admin!");
+                        alert("Akses Anda dicabut oleh Admin!");
                         logout();
                     }
                 });
-                // Cek MT Real-time
+                // Kick jika Maintenance diaktifkan
                 db.ref('system/maintenance').on('value', s => {
                     if(s.val() === true) {
-                        alert("Sistem memasuki mode Maintenance!");
+                        alert("Server memasuki mode Maintenance!");
                         logout();
                     }
                 });
             }
 
-            db.ref('system/bc').on('value', s => document.getElementById('live-broadcast').innerText = s.val() || "Operational.");
+            // Live BC
+            db.ref('system/bc').on('value', s => document.getElementById('live-broadcast').innerText = s.val() || "No Updates.");
 
             if(user.email === OWNER) {
                 document.getElementById('admin-link').style.display='flex';
@@ -221,20 +224,20 @@
         function initAdmin() {
             // Monitor MT Status
             db.ref('system/maintenance').on('value', s => {
-                isMT = s.val();
-                const label = document.getElementById('mt-label');
-                label.innerText = isMT ? "MT MODE: ON (PRIVATE)" : "MT MODE: OFF (PUBLIC)";
-                label.className = isMT ? "mt-status mt-on" : "mt-status mt-off";
+                isMT = s.val() || false;
+                const el = document.getElementById('mt-status-display');
+                el.innerText = isMT ? "ON (PRIVATE MODE)" : "OFF (PUBLIC MODE)";
+                el.className = isMT ? "mt-status status-on" : "mt-status status-off";
             });
 
             // Monitor Users Online
             db.ref('online').on('value', s => {
                 const u = s.val() || {}; const b = document.getElementById('online-users');
                 b.innerHTML = "";
-                for(let id in u) b.innerHTML += `<div class="user-row"><i class="fa-solid fa-circle" style="color:var(--success); font-size:7px;"></i> ${u[id].email}</div>`;
+                for(let id in u) b.innerHTML += `<div class="user-row"><span><i class="fa-solid fa-circle" style="color:var(--success); font-size:7px;"></i> ${u[id].email}</span></div>`;
             });
 
-            // Monitor Whitelist & Delete Feature
+            // Whitelist Management (Lengkap dengan Delete)
             db.ref('whitelist').on('value', s => {
                 const l = s.val() || {}; const b = document.getElementById('wl-list');
                 b.innerHTML = "";
@@ -248,17 +251,20 @@
             });
         }
 
-        function toggleMT() { db.ref('system/maintenance').set(!isMT); pushNotif("Maintenance Toggled!"); }
+        function toggleMaintenance() { db.ref('system/maintenance').set(!isMT); pushNotif("MT Mode Updated!"); }
         function sendBc() { db.ref('system/bc').set(document.getElementById('bc-input').value); pushNotif("BC Sent!"); }
         function addWl() { 
             const mail = document.getElementById('wl-input').value.toLowerCase().trim();
-            if(mail) db.ref('whitelist').push(mail); 
-            document.getElementById('wl-input').value = "";
+            if(mail) {
+                db.ref('whitelist').push(mail); 
+                document.getElementById('wl-input').value = "";
+                pushNotif("Access Added!");
+            }
         }
-        function delWl(id) { 
-            if(confirm("Hapus akses email ini?")) {
-                db.ref('whitelist/' + id).remove(); 
-                pushNotif("User Access Deleted!");
+        function delWl(key) {
+            if(confirm("Hapus akses email ini secara permanen?")) {
+                db.ref('whitelist/' + key).remove();
+                pushNotif("User Banned/Deleted!");
             }
         }
 

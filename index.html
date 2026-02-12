@@ -17,8 +17,29 @@
             --danger: #ff4757; --success: #2ed573; --admin: #ff9f43;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: white; height: 100vh; overflow: hidden; }
+        /* RESET & LOCK HORIZONTAL */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            font-family: 'Rajdhani', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+            touch-action: pan-y; 
+        }
+
+        html, body { 
+            background-color: var(--bg); color: white; 
+            height: 100vh; width: 100vw;
+            overflow: hidden; position: fixed;
+        }
+
+        /* MODERN MAINTENANCE SCREEN */
+        #mt-screen {
+            position: fixed; inset: 0; background: var(--bg);
+            z-index: 50000; display: none; flex-direction: column;
+            align-items: center; justify-content: center; text-align: center;
+            padding: 20px;
+        }
+        .mt-icon { font-size: 50px; color: var(--danger); margin-bottom: 20px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
         /* NOTIFIKASI */
         #notification-box { position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
@@ -26,41 +47,28 @@
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
         /* LOGIN SCREEN */
-        #login-screen { position: fixed; inset: 0; background: #050507; z-index: 20000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        #login-screen { position: fixed; inset: 0; background: #050507; z-index: 20000; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
         .btn-google { background: white; color: black; padding: 15px 30px; border-radius: 50px; font-family: 'Orbitron'; font-weight: bold; border: none; cursor: pointer; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
 
         #app-container { width: 100%; height: 100vh; position: relative; overflow: hidden; display: none; background: radial-gradient(circle at center, #10101a 0%, #050507 100%); }
 
-        /* NAVBAR MELEKAT KE ATAS */
-        nav { 
-            position: fixed; top: 0; left: 0; width: 100%; 
-            padding: 15px 25px; display: flex; justify-content: space-between; 
-            align-items: center; z-index: 1500; background: rgba(5,5,7,0.8); backdrop-filter: blur(10px);
-        }
+        nav { position: fixed; top: 0; left: 0; width: 100%; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; z-index: 1500; background: rgba(5,5,7,0.8); backdrop-filter: blur(10px); }
 
-        /* SIDE MENU */
-        #side-menu {
-            position: fixed; top: 0; left: -100%; width: 85%; height: 100%;
-            background: rgba(5, 5, 12, 0.98); z-index: 2000; transition: 0.5s;
-            padding: 40px 25px; border-right: 1px solid var(--accent); display: flex; flex-direction: column; gap: 10px;
-        }
+        #side-menu { position: fixed; top: 0; left: -100%; width: 85%; height: 100%; background: rgba(5, 5, 12, 0.98); z-index: 2000; transition: 0.5s; padding: 40px 25px; border-right: 1px solid var(--accent); display: flex; flex-direction: column; gap: 10px; }
         #side-menu.active { left: 0; }
         .profile-section { text-align: center; margin-bottom: 20px; border-bottom: 1px solid var(--glass); padding-bottom: 20px; }
         .profile-pic { width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
         .menu-item { padding: 15px; border-radius: 12px; font-family: 'Orbitron'; font-size: 12px; background: var(--glass); display: flex; align-items: center; gap: 15px; cursor: pointer; }
 
-        /* VIEWS */
-        .view { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 80px; overflow-y: auto; padding-bottom: 100px; }
+        .view { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 80px; overflow-y: auto; overflow-x: hidden; padding-bottom: 100px; }
         .view.active { display: flex; }
 
-        /* SLIDER 3D */
         .slider-3d { position: relative; width: 280px; height: 320px; transform-style: preserve-3d; transition: 0.6s; margin: 15px 0; }
         .card-3d { position: absolute; width: 100%; height: 100%; background: rgba(20, 20, 25, 0.98); border-radius: 20px; padding: 25px; text-align: center; border: 1px solid rgba(255,255,255,0.1); transition: 0.6s; backface-visibility: hidden; display: none; }
         .card-3d.active { display: block; transform: translateX(0) scale(1); opacity: 1; z-index: 10; border-color: var(--accent); box-shadow: 0 0 20px rgba(219, 219, 255, 0.2); }
         .card-3d.next { display: block; transform: translateX(60%) scale(0.7) rotateY(-20deg); opacity: 0.3; z-index: 5; }
         .card-3d.prev { display: block; transform: translateX(-60%) scale(0.7) rotateY(20deg); opacity: 0.3; z-index: 5; }
 
-        /* COMPONENTS */
         .admin-card { width: 92%; background: var(--glass); border: 1px solid #333; padding: 18px; border-radius: 15px; margin-bottom: 15px; }
         .admin-input, .admin-select { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; outline: none; margin-top: 10px; font-size: 14px; }
         .btn-main { background: var(--accent); color: #000; border: none; padding: 15px 0; border-radius: 40px; font-weight: 800; font-family: 'Orbitron'; width: 100%; cursor: pointer; transition: 0.3s; }
@@ -68,16 +76,22 @@
         .mt-status { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 10px; font-family: 'Orbitron'; margin-bottom: 10px; }
         .status-on { background: var(--danger); }
         .status-off { background: var(--success); }
-        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #222; font-size: 13px; }
-        .online-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; display: inline-block; margin-right: 8px; box-shadow: 0 0 5px var(--success); }
 
-        /* OVERLAY LOADER */
+        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 5px; margin-bottom: 5px; font-size: 12px; }
+
         #popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; }
         .loader { width: 50px; height: 50px; border: 4px solid #111; border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
+
+    <div id="mt-screen">
+        <i class="fa-solid fa-screwdriver-wrench mt-icon"></i>
+        <h2 style="font-family:'Orbitron'; color:var(--danger); letter-spacing:3px;">SYSTEM OFFLINE</h2>
+        <p style="color:#666; margin-top:10px; font-size:13px; font-family:'Orbitron';">MAINTENANCE IN PROGRESS</p>
+        <div style="margin-top:30px; width:50px; height:2px; background:var(--danger);"></div>
+    </div>
 
     <div id="login-screen">
         <div style="width:60px; height:60px; background:var(--accent); border-radius:15px; transform:rotate(45deg); margin-bottom:30px; box-shadow: 0 0 30px var(--accent);"></div>
@@ -179,11 +193,7 @@
                 <label style="font-size:10px; font-family:'Orbitron';">WHITELIST EMAIL</label>
                 <input type="text" id="wl-input" class="admin-input" placeholder="email@gmail.com">
                 <button class="btn-main" onclick="addWl()">TAMBAH AKSES</button>
-                <div id="wl-list" style="margin-top:15px; max-height: 150px; overflow-y: auto;"></div>
-            </div>
-            <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron'; color:var(--success);">USERS ONLINE</label>
-                <div id="online-list" style="margin-top:10px; font-size: 12px; color: #ccc;"></div>
+                <div id="wl-list" style="margin-top:15px; max-height: 200px; overflow-y: auto;"></div>
             </div>
             <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; margin-bottom:40px;">BACK</button>
         </div>
@@ -204,36 +214,37 @@
         const OWNER = "rizalxtt2@gmail.com";
         let isMT = false; let currentPos = 0;
 
-        // AUTH: Pakai Redirect biar lancar di HP
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             auth.signInWithRedirect(provider);
         }
 
-        auth.getRedirectResult().then(res => {
-            if(res.user) handleUser(res.user);
-        }).catch(e => {
-            document.getElementById('status-msg').innerText = "Login Gagal!";
-        });
-
-        auth.onAuthStateChanged(user => {
-            if(user) handleUser(user);
-            else document.getElementById('status-msg').innerText = "Silahkan Login";
-        });
+        auth.getRedirectResult().then(res => { if(res.user) handleUser(res.user); });
+        auth.onAuthStateChanged(user => { if(user) handleUser(user); });
 
         function handleUser(user) {
-            db.ref('system/maintenance').once('value', s => {
-                if(s.val() && user.email !== OWNER) {
-                    alert("SERVER SEDANG MAINTENANCE!"); auth.signOut(); return;
+            db.ref('system/maintenance').on('value', s => {
+                const mtState = s.val();
+                if(mtState && user.email !== OWNER) {
+                    document.getElementById('mt-screen').style.display = 'flex';
+                    document.getElementById('app-container').style.display = 'none';
+                    document.getElementById('login-screen').style.display = 'none';
+                } else {
+                    document.getElementById('mt-screen').style.display = 'none';
+                    checkWhitelist(user);
                 }
-                db.ref('whitelist').once('value', sw => {
-                    const list = sw.val() ? Object.values(sw.val()) : [];
-                    if(user.email === OWNER || list.includes(user.email)) {
-                        startApp(user);
-                    } else {
-                        alert("EMAIL ANDA TIDAK TERDAFTAR!"); auth.signOut();
-                    }
-                });
+            });
+        }
+
+        function checkWhitelist(user) {
+            db.ref('whitelist').once('value', sw => {
+                const list = sw.val() ? Object.values(sw.val()) : [];
+                if(user.email === OWNER || list.includes(user.email.toLowerCase())) {
+                    startApp(user);
+                } else {
+                    pushNotif("EMAIL TIDAK TERDAFTAR!");
+                    auth.signOut();
+                }
             });
         }
 
@@ -242,43 +253,47 @@
             document.getElementById('app-container').style.display='block';
             document.getElementById('user-name').innerText = user.displayName;
             document.getElementById('user-avatar').src = user.photoURL;
-
+            
             db.ref('online/' + user.uid).set({ email: user.email, name: user.displayName });
             db.ref('online/' + user.uid).onDisconnect().remove();
-            db.ref('system/bc').on('value', s => document.getElementById('live-broadcast').innerText = s.val() || "System Ready.");
             
-            if(user.email === OWNER) {
-                document.getElementById('admin-link').style.display='flex';
-                initAdmin();
+            db.ref('system/bc').on('value', s => document.getElementById('live-broadcast').innerText = s.val() || "Ready.");
+            if(user.email === OWNER) { 
+                document.getElementById('admin-link').style.display='flex'; 
+                initAdmin(); 
             }
         }
 
-        // ADMIN FUNCTIONS
         function initAdmin() {
+            // Maintenance Watcher
             db.ref('system/maintenance').on('value', s => {
                 isMT = s.val();
                 const el = document.getElementById('mt-status-display');
                 el.innerText = isMT ? "ON" : "OFF";
                 el.className = isMT ? "mt-status status-on" : "mt-status status-off";
             });
+
+            // Whitelist & Counter Watcher
             db.ref('whitelist').on('value', s => {
-                const l = s.val() || {}; const b = document.getElementById('wl-list');
-                b.innerHTML = "";
-                for(let id in l) b.innerHTML += `<div class="user-row">${l[id]} <i class="fa-solid fa-trash" style="color:red;" onclick="delWl('${id}')"></i></div>`;
-            });
-            db.ref('online').on('value', s => {
-                const list = s.val() || {}; const container = document.getElementById('online-list');
-                container.innerHTML = "";
-                for(let id in list) container.innerHTML += `<div><span class="online-dot"></span>${list[id].email}</div>`;
+                const l = s.val() || {}; 
+                const b = document.getElementById('wl-list');
+                const total = Object.keys(l).length;
+                
+                b.innerHTML = `<p style="font-size:10px; color:var(--accent); margin-bottom:10px; font-family:'Orbitron';">TOTAL DATABASE: ${total} USER</p>`;
+                for(let id in l) {
+                    b.innerHTML += `<div class="user-row">
+                        <span>${l[id]}</span>
+                        <i class="fa-solid fa-trash" style="color:var(--danger); cursor:pointer;" onclick="delWl('${id}')"></i>
+                    </div>`;
+                }
             });
         }
 
         function toggleMaintenance() { db.ref('system/maintenance').set(!isMT); }
-        function sendBc() { const m = document.getElementById('bc-input').value; if(m){ db.ref('system/bc').set(m); pushNotif("BC Sent!"); } }
-        function addWl() { const m = document.getElementById('wl-input').value; if(m){ db.ref('whitelist').push(m.toLowerCase().trim()); document.getElementById('wl-input').value=""; } }
-        function delWl(id) { db.ref('whitelist/'+id).remove(); }
+        function sendBc() { const m = document.getElementById('bc-input').value; if(m){ db.ref('system/bc').set(m); pushNotif("Broadcast Updated!"); } }
+        function addWl() { const m = document.getElementById('wl-input').value; if(m){ db.ref('whitelist').push(m.toLowerCase().trim()); document.getElementById('wl-input').value=""; pushNotif("User Added!"); } }
+        function delWl(id) { db.ref('whitelist/'+id).remove(); pushNotif("User Removed!"); }
 
-        // NAVIGATION & SLIDER
         function showView(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById('view-'+id).classList.add('active');
@@ -297,29 +312,23 @@
             }
         }
 
-        function selectBug(name) {
-            document.getElementById('selected-bug-name').innerText = name;
-            showView('feature');
-        }
+        function selectBug(name) { document.getElementById('selected-bug-name').innerText = name; showView('feature'); }
 
         function execute() {
             const target = document.getElementById('target').value;
-            if(!target) return pushNotif("Isi Target!");
+            if(!target) return pushNotif("Target Kosong!");
             document.getElementById('popup-overlay').style.display='flex';
             let p = 0;
             const iv = setInterval(() => {
-                p += Math.floor(Math.random()*20);
-                if(p>100) p=100;
+                p += 5;
                 document.getElementById('pct').innerText = p + "%";
-                if(p==100){
-                    clearInterval(iv);
-                    setTimeout(() => {
-                        document.getElementById('popup-overlay').style.display='none';
-                        pushNotif("Selesai!");
-                        showView('dashboard');
-                    }, 500);
+                if(p>=100){ 
+                    clearInterval(iv); 
+                    document.getElementById('popup-overlay').style.display='none'; 
+                    pushNotif("Execution Success!"); 
+                    showView('dashboard'); 
                 }
-            }, 300);
+            }, 50);
         }
 
         function pushNotif(m) {
@@ -331,6 +340,11 @@
         }
 
         function logout() { auth.signOut().then(() => location.reload()); }
+
+        // Security: Lock Screen Zoom
+        document.body.addEventListener('touchmove', function(e) {
+            if (e.touches.length > 1) e.preventDefault();
+        }, {passive: false});
     </script>
 </body>
 </html>

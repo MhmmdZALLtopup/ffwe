@@ -106,17 +106,17 @@
                 <div class="card-3d active" id="card-0">
                     <i class="fa-brands fa-whatsapp" style="font-size:50px; margin:30px 0; color:var(--accent)"></i>
                     <h2 style="font-family:'Orbitron';">BUG WA</h2>
-                    <button class="btn-main" style="margin-top:20px;" onclick="openFeature('BUG WA')">SELECT</button>
+                    <button class="btn-main" style="margin-top:20px;" onclick="selectBug('BUG WHATSAPP')">SELECT BUG</button>
                 </div>
                 <div class="card-3d next" id="card-1">
                     <i class="fa-solid fa-location-dot" style="font-size:50px; margin:30px 0; color:var(--accent)"></i>
                     <h2 style="font-family:'Orbitron';">TRACK IP</h2>
-                    <button class="btn-main" style="margin-top:20px;" onclick="openFeature('TRACK IP')">SELECT</button>
+                    <button class="btn-main" style="margin-top:20px;" onclick="selectBug('TRACK IP')">SELECT BUG</button>
                 </div>
                 <div class="card-3d prev" id="card-2">
                     <i class="fa-solid fa-robot" style="font-size:50px; margin:30px 0; color:var(--accent)"></i>
                     <h2 style="font-family:'Orbitron';">AI EXPLOIT</h2>
-                    <button class="btn-main" style="margin-top:20px;" onclick="openFeature('AI EXPLOIT')">SELECT</button>
+                    <button class="btn-main" style="margin-top:20px;" onclick="selectBug('AI EXPLOIT')">SELECT BUG</button>
                 </div>
             </div>
 
@@ -125,7 +125,7 @@
                 <button class="btn-main" style="width:50px;" onclick="changeCard(1)">></button>
             </div>
 
-            <div id="live-broadcast" style="width:85%; padding:15px; background:var(--glass); border-left:3px solid var(--accent); border-radius:8px; font-size:13px;">
+            <div id="live-broadcast" style="width:85%; padding:15px; background:var(--glass); border-left:3px solid var(--accent); border-radius:8px; font-size:13px; color:var(--success);">
                 Connecting...
             </div>
         </div>
@@ -140,6 +140,12 @@
             </div>
 
             <div class="admin-card">
+                <label style="font-size:10px; font-family:'Orbitron';">BROADCAST MESSAGE</label>
+                <input type="text" id="bc-input" class="admin-input" placeholder="Update message...">
+                <button class="btn-main" style="margin-top:10px; height:40px; background:var(--admin);" onclick="sendBc()">SEND BC</button>
+            </div>
+
+            <div class="admin-card">
                 <label style="font-size:10px; font-family:'Orbitron';">WHITELIST (ADD & DELETE)</label>
                 <input type="text" id="wl-input" class="admin-input" placeholder="email@gmail.com">
                 <button class="btn-main" style="margin-top:10px; height:40px;" onclick="addWl()">ADD ACCESS</button>
@@ -150,10 +156,11 @@
         </div>
 
         <div id="view-feature" class="view">
-            <h2 id="feat-title" style="font-family:'Orbitron'; color:var(--accent);">FEATURE</h2>
+            <h2 id="feat-title" style="font-family:'Orbitron'; color:var(--accent);">SELECT BUG FIRST</h2>
             <div class="admin-card">
-                <input type="text" id="target" class="admin-input" placeholder="Target Number/IP...">
-                <button class="btn-main" style="margin-top:20px;" onclick="execute()">EXECUTE</button>
+                <p id="selected-bug-name" style="font-size: 11px; color: var(--admin); margin-bottom: 5px; font-family: 'Orbitron';">Type: None</p>
+                <input type="text" id="target" class="admin-input" placeholder="Target Number/IP/URL...">
+                <button class="btn-main" style="margin-top:20px;" onclick="execute()">EXECUTE BUG</button>
             </div>
             <button onclick="showView('dashboard')" style="background:none; border:none; color:#555;">BACK</button>
         </div>
@@ -174,6 +181,7 @@
         const OWNER = "rizalxtt2@gmail.com";
         let isMT = false;
         let currentPos = 0;
+        let activeBug = "";
 
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
@@ -238,6 +246,10 @@
         }
 
         function toggleMaintenance() { db.ref('system/maintenance').set(!isMT); }
+        function sendBc() { 
+            const msg = document.getElementById('bc-input').value;
+            if(msg) { db.ref('system/bc').set(msg); document.getElementById('bc-input').value = ""; pushNotif("BC Sent!"); }
+        }
         function addWl() { 
             const m = document.getElementById('wl-input').value.toLowerCase().trim();
             if(m) { db.ref('whitelist').push(m); document.getElementById('wl-input').value=""; pushNotif("Added!"); }
@@ -263,15 +275,34 @@
             });
         }
 
-        function openFeature(n) { showView('feature'); document.getElementById('feat-title').innerText = n; }
+        function selectBug(name) {
+            activeBug = name;
+            document.getElementById('feat-title').innerText = "EXECUTE FORM";
+            document.getElementById('selected-bug-name').innerText = "Type: " + name;
+            showView('feature');
+        }
 
         function execute() {
+            const target = document.getElementById('target').value;
+            if(!activeBug) { pushNotif("Select Bug First!"); return; }
+            if(!target) { pushNotif("Enter Target!"); return; }
+
             const o = document.getElementById('popup-overlay'); o.style.display='flex';
             let p = 0;
             const i = setInterval(() => {
-                p += 10; document.getElementById('pct').innerText = p+"%";
-                if(p >= 100) { clearInterval(i); o.style.display='none'; pushNotif("Success!"); showView('dashboard'); }
-            }, 100);
+                p += Math.floor(Math.random() * 15);
+                if(p > 100) p = 100;
+                document.getElementById('pct').innerText = p+"%";
+                if(p >= 100) { 
+                    clearInterval(i); 
+                    setTimeout(() => {
+                        o.style.display='none'; 
+                        pushNotif("Success Sent " + activeBug); 
+                        document.getElementById('target').value = "";
+                        showView('dashboard'); 
+                    }, 500);
+                }
+            }, 150);
         }
 
         function logout() { auth.signOut(); location.reload(); }

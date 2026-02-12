@@ -24,13 +24,11 @@
         .toast { background: rgba(10, 10, 15, 0.9); border-left: 4px solid var(--accent); padding: 15px 25px; border-radius: 8px; backdrop-filter: blur(10px); font-family: 'Orbitron'; font-size: 11px; animation: slideIn 0.4s forwards; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-        /* LOGIN */
         #login-screen { position: fixed; inset: 0; background: #050507; z-index: 20000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .btn-google { background: white; color: black; padding: 15px 30px; border-radius: 50px; font-family: 'Orbitron'; font-weight: bold; border: none; cursor: pointer; }
 
         #app-container { width: 100%; height: 100vh; position: relative; overflow: hidden; display: none; background: radial-gradient(circle at center, #10101a 0%, #050507 100%); }
 
-        /* MENU */
         #side-menu {
             position: fixed; top: 0; left: -100%; width: 85%; height: 100%;
             background: rgba(5, 5, 12, 0.98); z-index: 2000; transition: 0.5s;
@@ -41,30 +39,29 @@
         .profile-pic { width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
         .menu-item { padding: 15px; border-radius: 12px; font-family: 'Orbitron'; font-size: 12px; background: var(--glass); display: flex; align-items: center; gap: 15px; cursor: pointer; }
 
-        /* VIEW */
         .view { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 80px; overflow-y: auto; padding-bottom: 100px; }
         .view.active { display: flex; }
 
-        /* SLIDER 3D CARDS */
         .slider-3d { position: relative; width: 280px; height: 320px; transform-style: preserve-3d; transition: 0.6s; margin: 20px 0; }
         .card-3d { position: absolute; width: 100%; height: 100%; background: rgba(20, 20, 25, 0.98); border-radius: 20px; padding: 25px; text-align: center; border: 1px solid rgba(255,255,255,0.1); transition: 0.6s; backface-visibility: hidden; }
         .card-3d.active { transform: translateX(0) scale(1); opacity: 1; z-index: 10; border-color: var(--accent); box-shadow: 0 0 20px rgba(219, 219, 255, 0.2); }
         .card-3d.next { transform: translateX(100%) scale(0.8) rotateY(-30deg); opacity: 0.2; z-index: 5; }
         .card-3d.prev { transform: translateX(-100%) scale(0.8) rotateY(30deg); opacity: 0.2; z-index: 5; }
 
-        /* ADMIN COMPONENTS */
         .admin-card { width: 90%; background: var(--glass); border: 1px solid #333; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
         .admin-input { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; outline: none; margin-top: 8px; }
         .btn-main { background: var(--accent); color: #000; border: none; padding: 15px 0; border-radius: 40px; font-weight: 800; font-family: 'Orbitron'; width: 100%; cursor: pointer; }
         .user-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #222; font-size: 13px; }
 
-        /* MISC */
         .mt-status { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 10px; font-family: 'Orbitron'; margin-bottom: 10px; }
         .status-on { background: var(--danger); }
         .status-off { background: var(--success); }
         #popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; }
         .loader { width: 40px; height: 40px; border: 3px solid #111; border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* New Online Indicator */
+        .online-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 5px var(--success); }
     </style>
 </head>
 <body>
@@ -134,35 +131,37 @@
             <h2 style="font-family:'Orbitron'; color:var(--admin); margin-bottom:20px;">ADMIN PANEL</h2>
             
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron';">SERVER MAINTENANCE</label><br>
+                <label style="font-size:10px; font-family:'Orbitron';">SYSTEM CONTROL</label><br>
                 <div id="mt-status-display" class="mt-status status-off">OFF</div>
                 <button class="btn-main" style="background:white; color:black; height:35px; font-size:11px;" onclick="toggleMaintenance()">TOGGLE MT MODE</button>
+                
+                <input type="text" id="bc-input" class="admin-input" placeholder="Live broadcast message...">
+                <button class="btn-main" style="margin-top:10px; height:40px; background:var(--admin);" onclick="sendBc()">SEND LIVE BC</button>
             </div>
 
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron';">BROADCAST MESSAGE</label>
-                <input type="text" id="bc-input" class="admin-input" placeholder="Update message...">
-                <button class="btn-main" style="margin-top:10px; height:40px; background:var(--admin);" onclick="sendBc()">SEND BC</button>
+                <label style="font-size:10px; font-family:'Orbitron'; color:var(--success);">LIVE USERS ONLINE</label>
+                <div id="online-list" style="margin-top:10px; font-size: 12px; color: #ccc;"></div>
             </div>
 
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron';">WHITELIST (ADD & DELETE)</label>
+                <label style="font-size:10px; font-family:'Orbitron';">WHITELIST (ACCESS CONTROL)</label>
                 <input type="text" id="wl-input" class="admin-input" placeholder="email@gmail.com">
                 <button class="btn-main" style="margin-top:10px; height:40px;" onclick="addWl()">ADD ACCESS</button>
                 <div id="wl-list" style="margin-top:15px; border-top:1px solid #333;"></div>
             </div>
 
-            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; margin-bottom:40px;">BACK</button>
+            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; margin-bottom:40px; cursor:pointer;">BACK</button>
         </div>
 
         <div id="view-feature" class="view">
-            <h2 id="feat-title" style="font-family:'Orbitron'; color:var(--accent);">SELECT BUG FIRST</h2>
+            <h2 id="feat-title" style="font-family:'Orbitron'; color:var(--accent);">FEATURE</h2>
             <div class="admin-card">
-                <p id="selected-bug-name" style="font-size: 11px; color: var(--admin); margin-bottom: 5px; font-family: 'Orbitron';">Type: None</p>
+                <p id="selected-bug-name" style="font-size: 11px; color: var(--admin); margin-bottom: 5px; font-family: 'Orbitron'; text-align: center;">Type: None</p>
                 <input type="text" id="target" class="admin-input" placeholder="Target Number/IP/URL...">
-                <button class="btn-main" style="margin-top:20px;" onclick="execute()">EXECUTE BUG</button>
+                <button class="btn-main" style="margin-top:20px;" onclick="execute()">EXECUTE</button>
             </div>
-            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555;">BACK</button>
+            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; cursor:pointer;">BACK</button>
         </div>
     </div>
 
@@ -204,10 +203,12 @@
             document.getElementById('login-screen').style.display='none';
             document.getElementById('app-container').style.display='block';
             document.getElementById('user-name').innerText = user.displayName;
-            document.getElementById('user-avatar').src = localStorage.getItem('upic') || user.photoURL;
+            document.getElementById('user-avatar').src = user.photoURL;
 
-            db.ref('online/' + user.uid).set({ email: user.email });
-            db.ref('online/' + user.uid).onDisconnect().remove();
+            // Fitur Live Online User
+            const onlineRef = db.ref('online/' + user.uid);
+            onlineRef.set({ email: user.email, name: user.displayName });
+            onlineRef.onDisconnect().remove();
 
             if(user.email !== OWNER) {
                 db.ref('whitelist').on('value', s => {
@@ -225,6 +226,7 @@
         }
 
         function initAdmin() {
+            // Monitor MT
             db.ref('system/maintenance').on('value', s => {
                 isMT = s.val() || false;
                 const el = document.getElementById('mt-status-display');
@@ -232,6 +234,7 @@
                 el.className = isMT ? "mt-status status-on" : "mt-status status-off";
             });
 
+            // Monitor Whitelist & Fitur Delete
             db.ref('whitelist').on('value', s => {
                 const l = s.val() || {}; const b = document.getElementById('wl-list');
                 b.innerHTML = "";
@@ -239,22 +242,36 @@
                     b.innerHTML += `
                     <div class="user-row">
                         <span>${l[id]}</span>
-                        <i class="fa-solid fa-trash-can" style="color:var(--danger); cursor:pointer;" onclick="delWl('${id}')"></i>
+                        <i class="fa-solid fa-trash-can" style="color:var(--danger); cursor:pointer; padding: 5px;" onclick="delWl('${id}')"></i>
                     </div>`;
+                }
+            });
+
+            // Monitor Live User
+            db.ref('online').on('value', s => {
+                const list = s.val() || {};
+                const container = document.getElementById('online-list');
+                container.innerHTML = "";
+                for(let id in list) {
+                    container.innerHTML += `<div><span class="online-dot"></span>${list[id].email}</div>`;
                 }
             });
         }
 
         function toggleMaintenance() { db.ref('system/maintenance').set(!isMT); }
         function sendBc() { 
-            const msg = document.getElementById('bc-input').value;
-            if(msg) { db.ref('system/bc').set(msg); document.getElementById('bc-input').value = ""; pushNotif("BC Sent!"); }
+            const m = document.getElementById('bc-input').value;
+            if(m) { db.ref('system/bc').set(m); document.getElementById('bc-input').value = ""; pushNotif("Broadcast Sent!"); }
         }
         function addWl() { 
             const m = document.getElementById('wl-input').value.toLowerCase().trim();
-            if(m) { db.ref('whitelist').push(m); document.getElementById('wl-input').value=""; pushNotif("Added!"); }
+            if(m) { db.ref('whitelist').push(m); document.getElementById('wl-input').value=""; pushNotif("Email Added!"); }
         }
-        function delWl(id) { if(confirm("Hapus akses?")) db.ref('whitelist/' + id).remove(); }
+        function delWl(id) { 
+            if(confirm("Hapus akses email ini?")) {
+                db.ref('whitelist/' + id).remove().then(() => pushNotif("Deleted!"));
+            } 
+        }
 
         function showView(id) { 
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); 
@@ -277,20 +294,20 @@
 
         function selectBug(name) {
             activeBug = name;
-            document.getElementById('feat-title').innerText = "EXECUTE FORM";
+            document.getElementById('feat-title').innerText = "EXECUTION FORM";
             document.getElementById('selected-bug-name').innerText = "Type: " + name;
             showView('feature');
         }
 
         function execute() {
             const target = document.getElementById('target').value;
-            if(!activeBug) { pushNotif("Select Bug First!"); return; }
-            if(!target) { pushNotif("Enter Target!"); return; }
+            if(!activeBug) { pushNotif("SELECT BUG FIRST!"); return; }
+            if(!target) { pushNotif("ENTER TARGET!"); return; }
 
             const o = document.getElementById('popup-overlay'); o.style.display='flex';
             let p = 0;
             const i = setInterval(() => {
-                p += Math.floor(Math.random() * 15);
+                p += Math.floor(Math.random() * 20);
                 if(p > 100) p = 100;
                 document.getElementById('pct').innerText = p+"%";
                 if(p >= 100) { 
@@ -302,7 +319,7 @@
                         showView('dashboard'); 
                     }, 500);
                 }
-            }, 150);
+            }, 200);
         }
 
         function logout() { auth.signOut(); location.reload(); }

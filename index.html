@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CrokBUG - Rizal/ARDS Premium</title>
+    <title>CrokBUG - Rizal/ARDS</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -22,14 +22,20 @@
 
         /* NOTIFIKASI */
         #notification-box { position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-        .toast { background: rgba(10, 10, 15, 0.9); border-left: 4px solid var(--accent); padding: 15px 25px; border-radius: 8px; backdrop-filter: blur(10px); font-family: 'Orbitron'; font-size: 11px; animation: slideIn 0.4s forwards; }
+        .toast { background: rgba(10, 10, 15, 0.9); border-left: 4px solid var(--accent); padding: 15px 25px; border-radius: 8px; backdrop-filter: blur(10px); font-family: 'Orbitron'; font-size: 11px; animation: slideIn 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* LOGIN SCREEN */
+        #login-screen { position: fixed; inset: 0; background: #050507; z-index: 20000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .btn-google { background: white; color: black; padding: 15px 30px; border-radius: 50px; font-family: 'Orbitron'; font-weight: bold; border: none; cursor: pointer; display: flex; align-items: center; gap: 10px; }
 
         #app-container { width: 100%; height: 100vh; position: relative; overflow: hidden; display: none; background: radial-gradient(circle at center, #10101a 0%, #050507 100%); }
 
         /* NAVBAR & SIDE MENU */
         .navbar { padding: 25px 20px; display: flex; justify-content: space-between; align-items: center; position: absolute; top: 0; width: 100%; z-index: 100; }
-        .logo-diamond { width: 30px; height: 30px; background: #fff; transform: rotate(45deg); border-radius: 4px; }
+        .logo-box { display: flex; align-items: center; gap: 12px; }
+        .logo-diamond { width: 30px; height: 30px; background: #fff; transform: rotate(45deg); border-radius: 4px; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
+        .logo-text { font-family: 'Orbitron'; font-size: 18px; letter-spacing: 1px; font-weight: 700; }
 
         #side-menu {
             position: fixed; top: 0; left: -100%; width: 85%; height: 100%;
@@ -39,49 +45,46 @@
         #side-menu.active { left: 0; }
         .menu-item { padding: 18px; border-radius: 12px; font-family: 'Orbitron'; font-size: 13px; background: var(--glass); display: flex; align-items: center; gap: 15px; cursor: pointer; }
 
-        /* VIEW SYSTEM */
-        .view { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 100px; }
+        /* 3D CAROUSEL */
+        .view { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: center; }
         .view.active { display: flex; }
-
-        /* CAROUSEL */
-        .carousel-container { height: 60%; width: 100%; display: flex; align-items: center; justify-content: center; perspective: 1200px; }
-        .slider-3d { position: relative; width: 280px; height: 380px; transform-style: preserve-3d; transition: 0.6s; }
-        .card-3d { position: absolute; width: 100%; height: 100%; background: rgba(20, 20, 25, 0.98); border-radius: 20px; padding: 25px 15px; text-align: center; border: 1px solid #222; transition: 0.6s; backface-visibility: hidden; }
+        .carousel-container { height: 100%; width: 100%; display: flex; align-items: center; justify-content: center; perspective: 1200px; }
+        .slider-3d { position: relative; width: 280px; height: 420px; transform-style: preserve-3d; transition: 0.6s; }
+        .card-3d { position: absolute; width: 100%; height: 100%; background: rgba(20, 20, 25, 0.98); border-radius: 20px; padding: 25px 15px; text-align: center; backface-visibility: hidden; transition: 0.6s; border: 1px solid rgba(255,255,255,0.1); }
         .card-3d.active { transform: translateX(0) scale(1); opacity: 1; z-index: 10; border-color: var(--accent); }
-        .card-3d.next { transform: translateX(110%) scale(0.8) rotateY(-30deg); opacity: 0.3; }
-        .card-3d.prev { transform: translateX(-110%) scale(0.8) rotateY(30deg); opacity: 0.3; }
-
-        /* BROADCAST BOX */
-        .status-broadcast { width: 85%; margin-top: 20px; padding: 15px; background: var(--glass); border-radius: 12px; border-left: 3px solid var(--accent); }
+        .card-3d.next { transform: translateX(105%) rotateY(-45deg) scale(0.8); opacity: 0.2; }
+        .card-3d.prev { transform: translateX(-105%) rotateY(45deg) scale(0.8); opacity: 0.2; }
 
         /* ADMIN CARD */
-        .admin-card { width: 90%; background: var(--glass); border: 1px solid #333; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
-        .admin-input { width: 100%; padding: 12px; background: #000; border: 1px solid var(--admin); color: #fff; border-radius: 8px; margin-top: 10px; outline: none; }
-        .btn-admin { width: 100%; padding: 12px; background: var(--admin); border: none; border-radius: 8px; font-family: 'Orbitron'; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        .admin-card { width: 90%; background: var(--glass); border: 1px solid #333; padding: 15px; border-radius: 12px; margin-bottom: 10px; }
+        .admin-input { width: 100%; padding: 15px; background: #000; border: 1px solid var(--admin); color: #fff; border-radius: 10px; outline: none; margin-top: 10px; }
 
-        /* LOGS */
-        .log-box { width: 100%; height: 150px; overflow-y: auto; background: #000; padding: 10px; font-size: 11px; border-radius: 8px; border: 1px solid #111; margin-top: 10px; }
-        .log-item { border-bottom: 1px solid #111; padding: 5px 0; }
-
-        /* BUTTONS */
-        .btn-open { background: var(--accent); color: #000; border: none; padding: 15px 0; border-radius: 40px; font-weight: 800; font-family: 'Orbitron'; width: 85%; }
-        .nav-footer { margin-top: 20px; display: flex; gap: 20px; }
-        .btn-nav { width: 50px; height: 50px; border-radius: 50%; border: 1px solid #333; background: transparent; color: white; }
-
-        /* LOGIN */
-        #login-screen { position: fixed; inset: 0; background: #050507; z-index: 20000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .btn-google { background: white; color: black; padding: 15px 30px; border-radius: 50px; font-family: 'Orbitron'; font-weight: bold; border: none; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        /* OTHERS */
+        .btn-open { background: var(--accent); color: #000; border: none; padding: 15px 0; border-radius: 40px; font-weight: 800; font-family: 'Orbitron'; width: 85%; cursor: pointer; }
+        .btn-nav { width: 55px; height: 55px; border-radius: 50%; border: 1px solid #333; background: transparent; color: white; cursor: pointer; }
+        
+        #popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; }
+        .loader { width: 50px; height: 50px; border: 3px solid #111; border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
     <div id="login-screen">
-        <div class="logo-diamond" style="margin-bottom: 20px; width: 50px; height: 50px;"></div>
+        <div class="logo-diamond" style="width: 60px; height: 60px; margin-bottom: 20px;"></div>
         <h1 style="font-family:'Orbitron'; margin-bottom: 30px; letter-spacing: 5px;">CrokBUG</h1>
-        <button class="btn-google" onclick="loginWithGoogle()">SIGN IN WITH GMAIL</button>
+        <button class="btn-google" onclick="loginWithGoogle()">
+            <i class="fa-brands fa-google"></i> SIGN IN GMAIL
+        </button>
     </div>
 
     <div id="notification-box"></div>
+
+    <div id="popup-overlay">
+        <div class="loader"></div>
+        <div id="pct" style="font-family:'Orbitron'; font-size:24px; margin: 10px 0;">0%</div>
+        <div id="msg" style="font-size:11px; letter-spacing:2px;">INJECTING...</div>
+    </div>
 
     <div id="app-container">
         <div id="side-menu">
@@ -89,6 +92,7 @@
                 <i class="fa-solid fa-user-shield"></i> ADMIN DASHBOARD
             </div>
             <div class="menu-item" onclick="showView('dashboard')"><i class="fa-solid fa-house"></i> DASHBOARD</div>
+            <div class="menu-item" onclick="showView('history')"><i class="fa-solid fa-clock-rotate-left"></i> HISTORY</div>
             <div class="menu-item" style="color:var(--danger); margin-top: auto;" onclick="logout()">
                 <i class="fa-solid fa-power-off"></i> LOGOUT
             </div>
@@ -96,61 +100,67 @@
 
         <div id="view-dashboard" class="view active">
             <nav class="navbar">
-                <div class="logo-diamond"></div>
-                <div onclick="toggleMenu()"><i class="fa-solid fa-bars-staggered" style="font-size:22px;"></i></div>
+                <div class="logo-box"><div class="logo-diamond"></div><div class="logo-text">CrokBUG</div></div>
+                <div onclick="toggleMenu()"><i class="fa-solid fa-bars-staggered" style="font-size:24px;"></i></div>
             </nav>
 
             <div class="carousel-container">
                 <div class="slider-3d">
                     <div class="card-3d active" id="card-0">
                         <i class="fa-brands fa-whatsapp" style="font-size:50px; margin:40px 0; color:var(--accent)"></i>
-                        <h2 style="font-family:'Orbitron'; margin-bottom:20px;">BUG WA</h2>
+                        <h2 class="title" style="font-family:'Orbitron'; margin-bottom: 20px;">BUG WA</h2>
                         <button class="btn-open" onclick="openFeature('BUG WA')">SELECT</button>
+                    </div>
+                    <div class="card-3d next" id="card-1">
+                        <i class="fa-solid fa-location-crosshairs" style="font-size:50px; margin:40px 0; color:var(--accent)"></i>
+                        <h2 class="title" style="font-family:'Orbitron'; margin-bottom: 20px;">TRACK IP</h2>
+                        <button class="btn-open" onclick="openFeature('TRACK IP')">SELECT</button>
+                    </div>
+                    <div class="card-3d prev" id="card-2">
+                        <i class="fa-solid fa-robot" style="font-size:50px; margin:40px 0; color:var(--accent)"></i>
+                        <h2 class="title" style="font-family:'Orbitron'; margin-bottom: 20px;">AI EXPLOIT</h2>
+                        <button class="btn-open" onclick="openFeature('AI EXPLOIT')">SELECT</button>
                     </div>
                 </div>
             </div>
 
-            <div class="status-broadcast">
-                <small style="font-family:'Orbitron'; color:var(--accent); font-size:9px;">SYSTEM STATUS:</small>
-                <p id="live-status-text" style="font-size:13px; font-weight:bold; margin-top:5px;">Connecting...</p>
+            <div style="position:absolute; bottom:80px; display:flex; gap:20px;">
+                <button class="btn-nav" onclick="changeCard(-1)"><i class="fa-solid fa-arrow-left"></i></button>
+                <button class="btn-nav" onclick="changeCard(1)"><i class="fa-solid fa-arrow-right"></i></button>
             </div>
         </div>
 
-        <div id="view-admin" class="view" style="overflow-y: auto;">
-            <h2 style="font-family:'Orbitron'; color:var(--admin); margin-bottom:20px;">ADMIN PANEL</h2>
+        <div id="view-admin" class="view" style="padding-top: 100px; justify-content: flex-start;">
+            <h2 style="font-family:'Orbitron'; color:var(--admin); margin-bottom:30px;">ADMIN PANEL</h2>
             
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron';">UPDATE BROADCAST STATUS</label>
-                <input type="text" id="status-input" class="admin-input" placeholder="Tulis status baru...">
-                <button class="btn-admin" onclick="updateSystemStatus()">UPDATE REALTIME</button>
+                <label style="font-size:11px; font-family:'Orbitron';">ADD NEW ACCESS (EMAIL)</label>
+                <input type="text" id="new-email" class="admin-input" placeholder="example@gmail.com">
+                <button class="btn-open" style="background:var(--admin); margin-top:15px; width:100%;" onclick="addWhitelistedEmail()">AUTHORIZE EMAIL</button>
             </div>
 
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron';">USER ONLINE: <span id="u-count">0</span></label>
-                <div id="admin-user-list" class="log-box" style="height: 80px;"></div>
+                <label style="font-size:11px; font-family:'Orbitron';">AUTHORIZED USERS</label>
+                <div id="whitelist-display" style="margin-top:10px; font-size:12px; max-height: 200px; overflow-y: auto;">
+                    </div>
             </div>
 
-            <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron'; color:var(--success);">LIVE ACTIVITY LOGS</label>
-                <div id="admin-logs" class="log-box"></div>
-            </div>
-
-            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; margin: 20px 0;">BACK</button>
+            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; margin-top:20px;">BACK</button>
         </div>
 
-        <div id="view-feature" class="view">
-            <h2 id="feat-title" style="font-family:'Orbitron'; color:var(--accent); margin-bottom:30px;">FEATURE</h2>
+        <div id="view-feature" class="view" style="padding-top:100px; justify-content: flex-start;">
+            <h1 id="feat-title" style="font-family:'Orbitron'; color:var(--accent); margin-bottom:30px;">FEATURE</h1>
             <div style="width:85%;">
-                <label style="font-size:11px; opacity:0.5;">TARGET</label>
-                <input type="text" id="targetInput" placeholder="Nomor/IP..." class="admin-input" style="border-color:#333;">
+                <input type="text" id="targetInput" placeholder="Enter Target..." class="admin-input" style="border-color:#333;">
             </div>
-            <button class="btn-open" style="margin-top:30px;" onclick="executeAction()">EXECUTE</button>
-            <button onclick="showView('dashboard')" style="margin-top:auto; background:none; border:none; color:#555;">RETURN</button>
+            <button class="btn-open" style="margin-top:30px;" onclick="executeSystem()">EXECUTE ACTION</button>
+            <button onclick="showView('dashboard')" style="margin-top:auto; background:none; border:none; color:#555; font-family:'Orbitron'; font-size:10px; margin-bottom: 30px;">RETURN</button>
         </div>
 
     </div>
 
     <script>
+        // --- KONFIGURASI FIREBASE ---
         const firebaseConfig = {
             apiKey: "AIzaSyCOsJ3yJxnZah3JPx78Lu3PG0ujQd0rtlo",
             authDomain: "spotify-tets.firebaseapp.com",
@@ -165,89 +175,86 @@
         const auth = firebase.auth();
         const db = firebase.database();
 
-        // EMAIL ADMIN BARU
         const OWNER_EMAIL = "rizalxtt2@gmail.com";
-        let currentUser = null;
+        let currentPos = 0;
 
+        // AUTH & WHITELIST CHECK
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider);
+            auth.signInWithPopup(provider).then(result => {
+                const user = result.user;
+                checkWhitelist(user);
+            }).catch(err => pushNotif("Login Failed!"));
+        }
+
+        function checkWhitelist(user) {
+            // Jika Owner, Langsung Masuk
+            if(user.email === OWNER_EMAIL) return grantAccess(user);
+
+            // Cek di Database Whitelist
+            db.ref('whitelist').once('value', s => {
+                const list = s.val() || {};
+                const emails = Object.values(list);
+                if(emails.includes(user.email)) {
+                    grantAccess(user);
+                } else {
+                    pushNotif("ACCESS DENIED: Email Not Authorized!");
+                    auth.signOut();
+                }
+            });
+        }
+
+        function grantAccess(user) {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app-container').style.display = 'block';
+            if(user.email === OWNER_EMAIL) {
+                document.getElementById('admin-link').style.display = 'flex';
+                loadWhitelist();
+            }
+            pushNotif("Welcome, " + user.displayName);
         }
 
         function logout() { auth.signOut(); location.reload(); }
 
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                currentUser = user;
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('app-container').style.display = 'block';
-                
-                db.ref('users/' + user.uid).set({ email: user.email, name: user.displayName });
-
-                if (user.email === OWNER_EMAIL) {
-                    document.getElementById('admin-link').style.display = 'flex';
-                    initAdminPanel();
-                }
-                
-                // Load Realtime Status
-                db.ref('system/status').on('value', s => {
-                    document.getElementById('live-status-text').innerText = s.val() || "System Secured";
-                });
-
-                pushNotif("Welcome, " + user.displayName);
-            }
-        });
-
-        // ADMIN FUNCTIONS
-        function updateSystemStatus() {
-            const txt = document.getElementById('status-input').value;
-            if(!txt) return;
-            db.ref('system/status').set(txt).then(() => {
-                pushNotif("Status Updated!");
-                document.getElementById('status-input').value = "";
+        // ADMIN: ADD EMAIL TO WHITELIST
+        function addWhitelistedEmail() {
+            const email = document.getElementById('new-email').value.toLowerCase().trim();
+            if(!email.includes('@')) return pushNotif("Invalid Email!");
+            
+            db.ref('whitelist').push(email).then(() => {
+                pushNotif("Access Granted to: " + email);
+                document.getElementById('new-email').value = "";
             });
         }
 
-        function initAdminPanel() {
-            // Monitor Users
-            db.ref('users').on('value', s => {
-                const users = s.val();
-                document.getElementById('u-count').innerText = s.numChildren();
-                const list = document.getElementById('admin-user-list');
-                list.innerHTML = "";
-                for(let id in users) list.innerHTML += `<div>${users[id].email}</div>`;
-            });
-
-            // Monitor Logs
-            db.ref('logs').limitToLast(15).on('value', s => {
-                const logs = s.val();
-                const box = document.getElementById('admin-logs');
-                box.innerHTML = "";
-                for(let id in logs) {
-                    const l = logs[id];
-                    box.innerHTML = `<div class="log-item"><b>${l.user}</b>: ${l.feat} -> ${l.target}</div>` + box.innerHTML;
+        function loadWhitelist() {
+            db.ref('whitelist').on('value', s => {
+                const list = s.val() || {};
+                const display = document.getElementById('whitelist-display');
+                display.innerHTML = "";
+                for(let id in list) {
+                    display.innerHTML += `<div style="padding:8px; border-bottom:1px solid #222; display:flex; justify-content:space-between;">
+                        ${list[id]} <i class="fa-solid fa-trash" style="color:var(--danger)" onclick="removeEmail('${id}')"></i>
+                    </div>`;
                 }
             });
         }
 
-        // ACTION
-        function executeAction() {
-            const target = document.getElementById('targetInput').value;
-            const feat = document.getElementById('feat-title').innerText;
-            if(!target) return pushNotif("Input Target!");
+        function removeEmail(id) { db.ref('whitelist/' + id).remove(); }
 
-            db.ref('logs').push({
-                user: currentUser.email,
-                feat: feat,
-                target: target,
-                time: new Date().toLocaleTimeString()
+        // CAROUSEL LOGIC
+        function changeCard(dir) {
+            currentPos = (currentPos + dir + 3) % 3;
+            const cards = [document.getElementById('card-0'), document.getElementById('card-1'), document.getElementById('card-2')];
+            cards.forEach((c, i) => {
+                c.className = 'card-3d';
+                if(i === currentPos) c.classList.add('active');
+                else if(i === (currentPos + 1) % 3) c.classList.add('next');
+                else c.classList.add('prev');
             });
-
-            pushNotif("Action Sent!");
-            showView('dashboard');
         }
 
-        // NAVIGATION
+        // UI ACTIONS
         function showView(id) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById('view-' + id).classList.add('active');
@@ -256,10 +263,28 @@
 
         function toggleMenu() { document.getElementById('side-menu').classList.toggle('active'); }
         function openFeature(name) { showView('feature'); document.getElementById('feat-title').innerText = name; }
+
+        function executeSystem() {
+            if(!document.getElementById('targetInput').value) return pushNotif("Target Required!");
+            const overlay = document.getElementById('popup-overlay');
+            overlay.style.display = 'flex';
+            let p = 0;
+            const int = setInterval(() => {
+                p += 5;
+                document.getElementById('pct').innerText = p + "%";
+                if(p >= 100) {
+                    clearInterval(int);
+                    overlay.style.display = 'none';
+                    pushNotif("Execution Success!");
+                    showView('dashboard');
+                }
+            }, 50);
+        }
+
         function pushNotif(m) {
             const box = document.getElementById('notification-box');
             const t = document.createElement('div');
-            t.className = 'toast'; t.innerText = m;
+            t.className = 'toast'; t.innerHTML = `<i class="fa-solid fa-bell"></i> &nbsp; ${m}`;
             box.appendChild(t);
             setTimeout(() => t.remove(), 3000);
         }

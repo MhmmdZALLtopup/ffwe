@@ -20,15 +20,25 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Rajdhani', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg); color: white; height: 100vh; overflow: hidden; }
 
+        /* NOTIFIKASI */
         #notification-box { position: fixed; top: 20px; right: 20px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
         .toast { background: rgba(10, 10, 15, 0.9); border-left: 4px solid var(--accent); padding: 15px 25px; border-radius: 8px; backdrop-filter: blur(10px); font-family: 'Orbitron'; font-size: 11px; animation: slideIn 0.4s forwards; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
+        /* LOGIN SCREEN */
         #login-screen { position: fixed; inset: 0; background: #050507; z-index: 20000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .btn-google { background: white; color: black; padding: 15px 30px; border-radius: 50px; font-family: 'Orbitron'; font-weight: bold; border: none; cursor: pointer; }
+        .btn-google { background: white; color: black; padding: 15px 30px; border-radius: 50px; font-family: 'Orbitron'; font-weight: bold; border: none; cursor: pointer; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
 
         #app-container { width: 100%; height: 100vh; position: relative; overflow: hidden; display: none; background: radial-gradient(circle at center, #10101a 0%, #050507 100%); }
 
+        /* NAVBAR MELEKAT KE ATAS */
+        nav { 
+            position: absolute; top: 0; left: 0; width: 100%; 
+            padding: 20px 25px; display: flex; justify-content: space-between; 
+            align-items: center; z-index: 1500;
+        }
+
+        /* SIDE MENU */
         #side-menu {
             position: fixed; top: 0; left: -100%; width: 85%; height: 100%;
             background: rgba(5, 5, 12, 0.98); z-index: 2000; transition: 0.5s;
@@ -39,106 +49,134 @@
         .profile-pic { width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
         .menu-item { padding: 15px; border-radius: 12px; font-family: 'Orbitron'; font-size: 12px; background: var(--glass); display: flex; align-items: center; gap: 15px; cursor: pointer; }
 
+        /* VIEWS */
         .view { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 80px; overflow-y: auto; padding-bottom: 100px; }
         .view.active { display: flex; }
 
-        /* SLIDER 3D 5 CARDS */
-        .slider-3d { position: relative; width: 280px; height: 320px; transform-style: preserve-3d; transition: 0.6s; margin: 20px 0; }
+        /* SLIDER 3D */
+        .slider-3d { position: relative; width: 280px; height: 320px; transform-style: preserve-3d; transition: 0.6s; margin: 15px 0; }
         .card-3d { position: absolute; width: 100%; height: 100%; background: rgba(20, 20, 25, 0.98); border-radius: 20px; padding: 25px; text-align: center; border: 1px solid rgba(255,255,255,0.1); transition: 0.6s; backface-visibility: hidden; display: none; }
         .card-3d.active { display: block; transform: translateX(0) scale(1); opacity: 1; z-index: 10; border-color: var(--accent); box-shadow: 0 0 20px rgba(219, 219, 255, 0.2); }
         .card-3d.next { display: block; transform: translateX(60%) scale(0.7) rotateY(-20deg); opacity: 0.3; z-index: 5; }
         .card-3d.prev { display: block; transform: translateX(-60%) scale(0.7) rotateY(20deg); opacity: 0.3; z-index: 5; }
 
-        .admin-card { width: 90%; background: var(--glass); border: 1px solid #333; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
-        .admin-input { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; outline: none; margin-top: 8px; }
-        .btn-main { background: var(--accent); color: #000; border: none; padding: 15px 0; border-radius: 40px; font-weight: 800; font-family: 'Orbitron'; width: 100%; cursor: pointer; }
-        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #222; font-size: 13px; }
-
+        /* COMPONENTS */
+        .admin-card { width: 92%; background: var(--glass); border: 1px solid #333; padding: 18px; border-radius: 15px; margin-bottom: 15px; }
+        .admin-input, .admin-select { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; outline: none; margin-top: 10px; font-size: 14px; }
+        .admin-select { cursor: pointer; border-color: var(--accent); }
+        .btn-main { background: var(--accent); color: #000; border: none; padding: 15px 0; border-radius: 40px; font-weight: 800; font-family: 'Orbitron'; width: 100%; cursor: pointer; transition: 0.3s; }
+        .btn-main:active { transform: scale(0.95); opacity: 0.8; }
+        
         .mt-status { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 10px; font-family: 'Orbitron'; margin-bottom: 10px; }
         .status-on { background: var(--danger); }
         .status-off { background: var(--success); }
+        .user-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #222; font-size: 13px; }
+        .online-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; display: inline-block; margin-right: 8px; box-shadow: 0 0 5px var(--success); }
+
+        /* OVERLAY LOADER */
         #popup-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 5000; display: none; flex-direction: column; align-items: center; justify-content: center; }
-        .loader { width: 40px; height: 40px; border: 3px solid #111; border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+        .loader { width: 50px; height: 50px; border: 4px solid #111; border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        
-        .online-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 5px var(--success); }
     </style>
 </head>
 <body>
 
     <div id="login-screen">
-        <div style="width:50px; height:50px; background:#fff; transform:rotate(45deg); margin-bottom:20px;"></div>
-        <h1 style="font-family:'Orbitron'; margin-bottom:30px;">CrokBUG</h1>
-        <button class="btn-google" onclick="loginWithGoogle()">SIGN IN GMAIL</button>
+        <div style="width:60px; height:60px; background:var(--accent); border-radius:15px; transform:rotate(45deg); margin-bottom:30px; box-shadow: 0 0 30px var(--accent);"></div>
+        <h1 style="font-family:'Orbitron'; margin-bottom:10px; letter-spacing:5px;">CrokBUG</h1>
+        <p style="color:#666; font-size:12px; margin-bottom:40px; font-family:'Orbitron';">RIZAL/ARDS ULTIMATE</p>
+        <button class="btn-google" onclick="loginWithGoogle()">
+            <i class="fa-brands fa-google" style="margin-right:10px;"></i> SIGN IN GMAIL
+        </button>
     </div>
 
     <div id="notification-box"></div>
-    <div id="popup-overlay"><div class="loader"></div><div id="pct" style="font-family:'Orbitron'; margin-top:10px;">0%</div></div>
+    <div id="popup-overlay"><div class="loader"></div><div id="pct" style="font-family:'Orbitron'; margin-top:15px; color:var(--accent); font-size:20px;">0%</div></div>
 
     <div id="app-container">
+        <nav>
+            <div style="font-family:'Orbitron'; font-weight:700; font-size:18px; color:var(--accent); text-shadow: 0 0 10px rgba(219,219,255,0.5);">CrokBUG</div>
+            <div onclick="toggleMenu(true)"><i class="fa-solid fa-bars-staggered" style="font-size:24px; cursor:pointer;"></i></div>
+        </nav>
+
         <div id="side-menu">
-            <div style="text-align: right;"><i class="fa-solid fa-xmark" style="font-size: 24px; cursor: pointer;" onclick="toggleMenu(false)"></i></div>
+            <div style="text-align: right;"><i class="fa-solid fa-xmark" style="font-size: 28px; cursor: pointer;" onclick="toggleMenu(false)"></i></div>
             <div class="profile-section">
                 <img id="user-avatar" src="" class="profile-pic">
-                <h4 id="user-name" style="font-family:'Orbitron'; font-size:12px; margin-top:10px;">USER</h4>
+                <h4 id="user-name" style="font-family:'Orbitron'; font-size:12px; margin-top:12px; color:var(--accent);">USER NAME</h4>
             </div>
             <div class="menu-item" onclick="showView('dashboard')"><i class="fa-solid fa-house"></i> DASHBOARD</div>
             <div id="admin-link" class="menu-item" style="display:none; color:var(--admin); border:1px solid var(--admin);" onclick="showView('admin')">
                 <i class="fa-solid fa-user-shield"></i> ADMIN PANEL
             </div>
-            <div class="menu-item" onclick="showView('setting')"><i class="fa-solid fa-gear"></i> SETTINGS</div>
-            <div class="menu-item" onclick="showView('rules')"><i class="fa-solid fa-shield"></i> RULES</div>
+            <div class="menu-item" onclick="pushNotif('Feature Locked')"><i class="fa-solid fa-gear"></i> SETTINGS</div>
+            <div class="menu-item" onclick="pushNotif('Rules: No Spam!')"><i class="fa-solid fa-shield"></i> RULES</div>
             <div class="menu-item" style="color:var(--danger); margin-top:auto;" onclick="logout()">
                 <i class="fa-solid fa-power-off"></i> LOGOUT
             </div>
         </div>
 
         <div id="view-dashboard" class="view active">
-            <nav style="width:100%; padding:25px; display:flex; justify-content:space-between; align-items:center;">
-                <div style="font-family:'Orbitron';">CrokBUG</div>
-                <div onclick="toggleMenu(true)"><i class="fa-solid fa-bars-staggered" style="font-size:24px;"></i></div>
-            </nav>
-
             <div class="slider-3d">
                 <div class="card-3d active" id="card-0">
-                    <i class="fa-brands fa-whatsapp" style="font-size:50px; margin:30px 0; color:var(--accent)"></i>
-                    <h2 style="font-family:'Orbitron';">BUG WA</h2>
-                    <button class="btn-main" style="margin-top:20px;" onclick="selectBug('BUG WHATSAPP')">SELECT BUG</button>
+                    <i class="fa-brands fa-whatsapp" style="font-size:60px; margin:35px 0; color:var(--accent)"></i>
+                    <h2 style="font-family:'Orbitron';">BUG WHATSAPP</h2>
+                    <button class="btn-main" style="margin-top:25px;" onclick="selectBug('WHATSAPP')">SELECT BUG</button>
                 </div>
                 <div class="card-3d next" id="card-1">
-                    <i class="fa-solid fa-location-dot" style="font-size:50px; margin:30px 0; color:var(--accent)"></i>
+                    <i class="fa-solid fa-location-dot" style="font-size:60px; margin:35px 0; color:var(--accent)"></i>
                     <h2 style="font-family:'Orbitron';">TRACK IP</h2>
-                    <button class="btn-main" style="margin-top:20px;" onclick="selectBug('TRACK IP')">SELECT BUG</button>
+                    <button class="btn-main" style="margin-top:25px;" onclick="selectBug('TRACK IP')">SELECT BUG</button>
                 </div>
                 <div class="card-3d" id="card-2">
-                    <i class="fa-solid fa-robot" style="font-size:50px; margin:30px 0; color:var(--accent)"></i>
+                    <i class="fa-solid fa-robot" style="font-size:60px; margin:35px 0; color:var(--accent)"></i>
                     <h2 style="font-family:'Orbitron';">AI EXPLOIT</h2>
-                    <button class="btn-main" style="margin-top:20px;" onclick="selectBug('AI EXPLOIT')">SELECT BUG</button>
+                    <button class="btn-main" style="margin-top:25px;" onclick="selectBug('AI EXPLOIT')">SELECT BUG</button>
                 </div>
                 <div class="card-3d" id="card-3">
-                    <i class="fa-solid fa-database" style="font-size:50px; margin:30px 0; color:var(--accent)"></i>
+                    <i class="fa-solid fa-database" style="font-size:60px; margin:35px 0; color:var(--accent)"></i>
                     <h2 style="font-family:'Orbitron';">DB FREEZE</h2>
-                    <button class="btn-main" style="margin-top:20px;" onclick="selectBug('DB FREEZE')">SELECT BUG</button>
+                    <button class="btn-main" style="margin-top:25px;" onclick="selectBug('DB FREEZE')">SELECT BUG</button>
                 </div>
                 <div class="card-3d prev" id="card-4">
-                    <i class="fa-solid fa-cloud-bolt" style="font-size:50px; margin:30px 0; color:var(--accent)"></i>
+                    <i class="fa-solid fa-cloud-bolt" style="font-size:60px; margin:35px 0; color:var(--accent)"></i>
                     <h2 style="font-family:'Orbitron';">CLOUD CRASH</h2>
-                    <button class="btn-main" style="margin-top:20px;" onclick="selectBug('CLOUD CRASH')">SELECT BUG</button>
+                    <button class="btn-main" style="margin-top:25px;" onclick="selectBug('CLOUD CRASH')">SELECT BUG</button>
                 </div>
             </div>
 
-            <div style="display:flex; gap:15px; margin-bottom: 20px;">
-                <button class="btn-main" style="width:50px;" onclick="changeCard(-1)"><</button>
-                <button class="btn-main" style="width:50px;" onclick="changeCard(1)">></button>
+            <div style="display:flex; gap:20px; margin-bottom: 25px;">
+                <button class="btn-main" style="width:60px;" onclick="changeCard(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="btn-main" style="width:60px;" onclick="changeCard(1)"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
 
-            <div id="live-broadcast" style="width:85%; padding:15px; background:var(--glass); border-left:3px solid var(--accent); border-radius:8px; font-size:13px; color:var(--success);">
-                Connecting...
+            <div id="live-broadcast" style="width:85%; padding:15px; background:var(--glass); border-left:4px solid var(--accent); border-radius:10px; font-size:13px; color:var(--success); font-family:'Orbitron';">
+                System Online...
             </div>
         </div>
 
+        <div id="view-feature" class="view">
+            <h2 style="font-family:'Orbitron'; color:var(--accent); margin-bottom:20px;">SYSTEM EXECUTION</h2>
+            <div class="admin-card">
+                <p style="font-size: 10px; color: var(--admin); font-family: 'Orbitron';">CAT: <span id="selected-bug-name">NONE</span></p>
+                
+                <label style="display:block; margin-top:15px; font-size:11px; font-family:'Orbitron';">SELECT METHOD:</label>
+                <select id="bug-method" class="admin-select">
+                    <option value="Turbo Injection">1. Turbo Injection (Rapid)</option>
+                    <option value="System Overload">2. System Overload (L7)</option>
+                    <option value="Data Corruptor">3. Data Corruptor (V2)</option>
+                    <option value="Packet Storm">4. Packet Storm (Bypass)</option>
+                    <option value="Final Strike">5. Final Strike (Total Crash)</option>
+                </select>
+
+                <input type="text" id="target" class="admin-input" placeholder="Target Number / IP / URL">
+                <button class="btn-main" style="margin-top:25px;" onclick="execute()">EXECUTE NOW</button>
+            </div>
+            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; cursor:pointer; font-family:'Orbitron';">BACK TO HOME</button>
+        </div>
+
         <div id="view-admin" class="view">
-            <h2 style="font-family:'Orbitron'; color:var(--admin); margin-bottom:20px;">ADMIN PANEL</h2>
+            <h2 style="font-family:'Orbitron'; color:var(--admin); margin-bottom:20px;">ADMIN CONTROL</h2>
             <div class="admin-card">
                 <label style="font-size:10px; font-family:'Orbitron';">SERVER STATUS</label><br>
                 <div id="mt-status-display" class="mt-status status-off">OFF</div>
@@ -148,27 +186,17 @@
             </div>
 
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron'; color:var(--success);">LIVE USERS ONLINE</label>
+                <label style="font-size:10px; font-family:'Orbitron'; color:var(--success);">USERS ONLINE</label>
                 <div id="online-list" style="margin-top:10px; font-size: 12px; color: #ccc;"></div>
             </div>
 
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron';">ACCESS CONTROL (WHITELIST)</label>
+                <label style="font-size:10px; font-family:'Orbitron';">WHITELIST ACCESS</label>
                 <input type="text" id="wl-input" class="admin-input" placeholder="email@gmail.com">
-                <button class="btn-main" style="margin-top:10px; height:40px;" onclick="addWl()">ADD ACCESS</button>
+                <button class="btn-main" style="margin-top:10px; height:40px;" onclick="addWl()">ADD USER</button>
                 <div id="wl-list" style="margin-top:15px; border-top:1px solid #333;"></div>
             </div>
-            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; margin-bottom:40px; cursor:pointer;">BACK</button>
-        </div>
-
-        <div id="view-feature" class="view">
-            <h2 id="feat-title" style="font-family:'Orbitron'; color:var(--accent);">EXECUTION</h2>
-            <div class="admin-card">
-                <p id="selected-bug-name" style="font-size: 11px; color: var(--admin); margin-bottom: 5px; font-family: 'Orbitron'; text-align: center;">Type: None</p>
-                <input type="text" id="target" class="admin-input" placeholder="Target Number/IP/URL...">
-                <button class="btn-main" style="margin-top:20px;" onclick="execute()">EXECUTE</button>
-            </div>
-            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; cursor:pointer;">BACK</button>
+            <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; margin-bottom:40px;">BACK</button>
         </div>
     </div>
 
@@ -188,49 +216,43 @@
         let isMT = false;
         let currentPos = 0;
         let activeBug = "";
-        const totalCards = 5;
 
+        // AUTH FUNCTIONS
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             auth.signInWithPopup(provider).then(res => {
                 const user = res.user;
                 db.ref('system/maintenance').once('value', s => {
                     if(s.val() && user.email !== OWNER) {
-                        alert("Maintenance!"); auth.signOut(); return;
+                        alert("Server Maintenance!"); auth.signOut(); return;
                     }
                     db.ref('whitelist').once('value', sw => {
                         const list = sw.val() ? Object.values(sw.val()) : [];
                         if(user.email === OWNER || list.includes(user.email)) start(user);
-                        else { alert("No Access!"); auth.signOut(); }
+                        else { alert("Access Denied! Contact Admin."); auth.signOut(); }
                     });
                 });
-            });
+            }).catch(e => pushNotif("Login Failed!"));
         }
 
         function start(user) {
             document.getElementById('login-screen').style.display='none';
             document.getElementById('app-container').style.display='block';
-            document.getElementById('user-name').innerText = user.displayName;
+            document.getElementById('user-name').innerText = user.displayName.toUpperCase();
             document.getElementById('user-avatar').src = user.photoURL;
 
             db.ref('online/' + user.uid).set({ email: user.email, name: user.displayName });
             db.ref('online/' + user.uid).onDisconnect().remove();
 
-            if(user.email !== OWNER) {
-                db.ref('whitelist').on('value', s => {
-                    const list = s.val() ? Object.values(s.val()) : [];
-                    if(!list.includes(user.email)) logout();
-                });
-                db.ref('system/maintenance').on('value', s => { if(s.val()) logout(); });
-            }
-
-            db.ref('system/bc').on('value', s => document.getElementById('live-broadcast').innerText = s.val() || "Operational.");
+            db.ref('system/bc').on('value', s => document.getElementById('live-broadcast').innerText = s.val() || "Ready to use.");
+            
             if(user.email === OWNER) {
                 document.getElementById('admin-link').style.display='flex';
                 initAdmin();
             }
         }
 
+        // ADMIN LOGIC
         function initAdmin() {
             db.ref('system/maintenance').on('value', s => {
                 isMT = s.val() || false;
@@ -238,92 +260,84 @@
                 el.innerText = isMT ? "ON" : "OFF";
                 el.className = isMT ? "mt-status status-on" : "mt-status status-off";
             });
-
             db.ref('whitelist').on('value', s => {
                 const l = s.val() || {}; const b = document.getElementById('wl-list');
                 b.innerHTML = "";
                 for(let id in l) {
-                    b.innerHTML += `
-                    <div class="user-row">
-                        <span>${l[id]}</span>
-                        <i class="fa-solid fa-trash-can" style="color:var(--danger); cursor:pointer; padding:5px;" onclick="delWl('${id}')"></i>
-                    </div>`;
+                    b.innerHTML += `<div class="user-row"><span>${l[id]}</span><i class="fa-solid fa-trash" style="color:var(--danger);" onclick="delWl('${id}')"></i></div>`;
                 }
             });
-
             db.ref('online').on('value', s => {
-                const list = s.val() || {};
-                const container = document.getElementById('online-list');
+                const list = s.val() || {}; const container = document.getElementById('online-list');
                 container.innerHTML = "";
-                for(let id in list) {
-                    container.innerHTML += `<div><span class="online-dot"></span>${list[id].email}</div>`;
-                }
+                for(let id in list) container.innerHTML += `<div><span class="online-dot"></span>${list[id].email}</div>`;
             });
         }
 
         function toggleMaintenance() { db.ref('system/maintenance').set(!isMT); }
-        function sendBc() { 
-            const m = document.getElementById('bc-input').value;
-            if(m) { db.ref('system/bc').set(m); document.getElementById('bc-input').value = ""; pushNotif("BC Sent!"); }
-        }
-        function addWl() { 
-            const m = document.getElementById('wl-input').value.toLowerCase().trim();
-            if(m) { db.ref('whitelist').push(m); document.getElementById('wl-input').value=""; pushNotif("Added!"); }
-        }
-        function delWl(id) { if(confirm("Hapus akses?")) db.ref('whitelist/' + id).remove(); }
+        function sendBc() { const m = document.getElementById('bc-input').value; if(m){ db.ref('system/bc').set(m); document.getElementById('bc-input').value=""; pushNotif("BC Updated!"); } }
+        function addWl() { const m = document.getElementById('wl-input').value.toLowerCase().trim(); if(m){ db.ref('whitelist').push(m); document.getElementById('wl-input').value=""; pushNotif("User Added!"); } }
+        function delWl(id) { if(confirm("Remove access?")) db.ref('whitelist/' + id).remove(); }
 
-        function showView(id) { 
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); 
-            document.getElementById('view-'+id).classList.add('active'); 
-            toggleMenu(false); 
+        // NAVIGATION
+        function showView(id) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById('view-'+id).classList.add('active');
+            toggleMenu(false);
         }
-
         function toggleMenu(s) { document.getElementById('side-menu').classList.toggle('active', s); }
 
+        // SLIDER LOGIC
         function changeCard(d) {
-            currentPos = (currentPos + d + totalCards) % totalCards;
-            for(let i=0; i<totalCards; i++) {
+            currentPos = (currentPos + d + 5) % 5;
+            for(let i=0; i<5; i++) {
                 const c = document.getElementById('card-'+i);
                 c.className = 'card-3d';
                 if(i === currentPos) c.classList.add('active');
-                else if(i === (currentPos + 1) % totalCards) c.classList.add('next');
-                else if(i === (currentPos - 1 + totalCards) % totalCards) c.classList.add('prev');
+                else if(i === (currentPos + 1) % 5) c.classList.add('next');
+                else if(i === (currentPos - 1 + 5) % 5) c.classList.add('prev');
             }
         }
 
+        // EXECUTION LOGIC
         function selectBug(name) {
             activeBug = name;
-            document.getElementById('selected-bug-name').innerText = "Type: " + name;
+            document.getElementById('selected-bug-name').innerText = name;
             showView('feature');
         }
 
         function execute() {
+            const method = document.getElementById('bug-method').value;
             const target = document.getElementById('target').value;
-            if(!activeBug || !target) { pushNotif("Lengkapi Data!"); return; }
+            if(!target) { pushNotif("Target is empty!"); return; }
 
-            const o = document.getElementById('popup-overlay'); o.style.display='flex';
+            document.getElementById('popup-overlay').style.display='flex';
             let p = 0;
-            const i = setInterval(() => {
-                p += Math.floor(Math.random() * 25);
+            const interval = setInterval(() => {
+                p += Math.floor(Math.random() * 15);
                 if(p > 100) p = 100;
-                document.getElementById('pct').innerText = p+"%";
-                if(p >= 100) { 
-                    clearInterval(i); 
+                document.getElementById('pct').innerText = p + "%";
+                if(p >= 100) {
+                    clearInterval(interval);
                     setTimeout(() => {
-                        o.style.display='none'; 
-                        pushNotif("Bug Sent!"); 
+                        document.getElementById('popup-overlay').style.display='none';
+                        pushNotif("SENT: " + method);
                         document.getElementById('target').value = "";
-                        showView('dashboard'); 
-                    }, 500);
+                        showView('dashboard');
+                    }, 800);
                 }
-            }, 250);
+            }, 200);
         }
 
-        function logout() { auth.signOut(); location.reload(); }
         function pushNotif(m) {
-            const b = document.getElementById('notification-box'); const t = document.createElement('div');
-            t.className='toast'; t.innerText=m; b.appendChild(t); setTimeout(()=>t.remove(), 3000);
+            const b = document.getElementById('notification-box');
+            const t = document.createElement('div');
+            t.className='toast'; t.innerText=m;
+            b.appendChild(t);
+            setTimeout(() => t.remove(), 3000);
         }
+
+        function logout() { auth.signOut().then(() => location.reload()); }
     </script>
 </body>
 </html>

@@ -42,11 +42,12 @@
         .view { position: absolute; width: 100%; height: 100%; display: none; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 80px; overflow-y: auto; padding-bottom: 100px; }
         .view.active { display: flex; }
 
+        /* SLIDER 3D 5 CARDS */
         .slider-3d { position: relative; width: 280px; height: 320px; transform-style: preserve-3d; transition: 0.6s; margin: 20px 0; }
-        .card-3d { position: absolute; width: 100%; height: 100%; background: rgba(20, 20, 25, 0.98); border-radius: 20px; padding: 25px; text-align: center; border: 1px solid rgba(255,255,255,0.1); transition: 0.6s; backface-visibility: hidden; }
-        .card-3d.active { transform: translateX(0) scale(1); opacity: 1; z-index: 10; border-color: var(--accent); box-shadow: 0 0 20px rgba(219, 219, 255, 0.2); }
-        .card-3d.next { transform: translateX(100%) scale(0.8) rotateY(-30deg); opacity: 0.2; z-index: 5; }
-        .card-3d.prev { transform: translateX(-100%) scale(0.8) rotateY(30deg); opacity: 0.2; z-index: 5; }
+        .card-3d { position: absolute; width: 100%; height: 100%; background: rgba(20, 20, 25, 0.98); border-radius: 20px; padding: 25px; text-align: center; border: 1px solid rgba(255,255,255,0.1); transition: 0.6s; backface-visibility: hidden; display: none; }
+        .card-3d.active { display: block; transform: translateX(0) scale(1); opacity: 1; z-index: 10; border-color: var(--accent); box-shadow: 0 0 20px rgba(219, 219, 255, 0.2); }
+        .card-3d.next { display: block; transform: translateX(60%) scale(0.7) rotateY(-20deg); opacity: 0.3; z-index: 5; }
+        .card-3d.prev { display: block; transform: translateX(-60%) scale(0.7) rotateY(20deg); opacity: 0.3; z-index: 5; }
 
         .admin-card { width: 90%; background: var(--glass); border: 1px solid #333; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
         .admin-input { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; outline: none; margin-top: 8px; }
@@ -60,7 +61,6 @@
         .loader { width: 40px; height: 40px; border: 3px solid #111; border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
-        /* New Online Indicator */
         .online-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; display: inline-block; margin-right: 5px; box-shadow: 0 0 5px var(--success); }
     </style>
 </head>
@@ -110,10 +110,20 @@
                     <h2 style="font-family:'Orbitron';">TRACK IP</h2>
                     <button class="btn-main" style="margin-top:20px;" onclick="selectBug('TRACK IP')">SELECT BUG</button>
                 </div>
-                <div class="card-3d prev" id="card-2">
+                <div class="card-3d" id="card-2">
                     <i class="fa-solid fa-robot" style="font-size:50px; margin:30px 0; color:var(--accent)"></i>
                     <h2 style="font-family:'Orbitron';">AI EXPLOIT</h2>
                     <button class="btn-main" style="margin-top:20px;" onclick="selectBug('AI EXPLOIT')">SELECT BUG</button>
+                </div>
+                <div class="card-3d" id="card-3">
+                    <i class="fa-solid fa-database" style="font-size:50px; margin:30px 0; color:var(--accent)"></i>
+                    <h2 style="font-family:'Orbitron';">DB FREEZE</h2>
+                    <button class="btn-main" style="margin-top:20px;" onclick="selectBug('DB FREEZE')">SELECT BUG</button>
+                </div>
+                <div class="card-3d prev" id="card-4">
+                    <i class="fa-solid fa-cloud-bolt" style="font-size:50px; margin:30px 0; color:var(--accent)"></i>
+                    <h2 style="font-family:'Orbitron';">CLOUD CRASH</h2>
+                    <button class="btn-main" style="margin-top:20px;" onclick="selectBug('CLOUD CRASH')">SELECT BUG</button>
                 </div>
             </div>
 
@@ -129,14 +139,12 @@
 
         <div id="view-admin" class="view">
             <h2 style="font-family:'Orbitron'; color:var(--admin); margin-bottom:20px;">ADMIN PANEL</h2>
-            
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron';">SYSTEM CONTROL</label><br>
+                <label style="font-size:10px; font-family:'Orbitron';">SERVER STATUS</label><br>
                 <div id="mt-status-display" class="mt-status status-off">OFF</div>
                 <button class="btn-main" style="background:white; color:black; height:35px; font-size:11px;" onclick="toggleMaintenance()">TOGGLE MT MODE</button>
-                
-                <input type="text" id="bc-input" class="admin-input" placeholder="Live broadcast message...">
-                <button class="btn-main" style="margin-top:10px; height:40px; background:var(--admin);" onclick="sendBc()">SEND LIVE BC</button>
+                <input type="text" id="bc-input" class="admin-input" placeholder="Update message...">
+                <button class="btn-main" style="margin-top:10px; height:40px; background:var(--admin);" onclick="sendBc()">SEND BC</button>
             </div>
 
             <div class="admin-card">
@@ -145,17 +153,16 @@
             </div>
 
             <div class="admin-card">
-                <label style="font-size:10px; font-family:'Orbitron';">WHITELIST (ACCESS CONTROL)</label>
+                <label style="font-size:10px; font-family:'Orbitron';">ACCESS CONTROL (WHITELIST)</label>
                 <input type="text" id="wl-input" class="admin-input" placeholder="email@gmail.com">
                 <button class="btn-main" style="margin-top:10px; height:40px;" onclick="addWl()">ADD ACCESS</button>
                 <div id="wl-list" style="margin-top:15px; border-top:1px solid #333;"></div>
             </div>
-
             <button onclick="showView('dashboard')" style="background:none; border:none; color:#555; margin-bottom:40px; cursor:pointer;">BACK</button>
         </div>
 
         <div id="view-feature" class="view">
-            <h2 id="feat-title" style="font-family:'Orbitron'; color:var(--accent);">FEATURE</h2>
+            <h2 id="feat-title" style="font-family:'Orbitron'; color:var(--accent);">EXECUTION</h2>
             <div class="admin-card">
                 <p id="selected-bug-name" style="font-size: 11px; color: var(--admin); margin-bottom: 5px; font-family: 'Orbitron'; text-align: center;">Type: None</p>
                 <input type="text" id="target" class="admin-input" placeholder="Target Number/IP/URL...">
@@ -181,6 +188,7 @@
         let isMT = false;
         let currentPos = 0;
         let activeBug = "";
+        const totalCards = 5;
 
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
@@ -205,10 +213,8 @@
             document.getElementById('user-name').innerText = user.displayName;
             document.getElementById('user-avatar').src = user.photoURL;
 
-            // Fitur Live Online User
-            const onlineRef = db.ref('online/' + user.uid);
-            onlineRef.set({ email: user.email, name: user.displayName });
-            onlineRef.onDisconnect().remove();
+            db.ref('online/' + user.uid).set({ email: user.email, name: user.displayName });
+            db.ref('online/' + user.uid).onDisconnect().remove();
 
             if(user.email !== OWNER) {
                 db.ref('whitelist').on('value', s => {
@@ -226,7 +232,6 @@
         }
 
         function initAdmin() {
-            // Monitor MT
             db.ref('system/maintenance').on('value', s => {
                 isMT = s.val() || false;
                 const el = document.getElementById('mt-status-display');
@@ -234,7 +239,6 @@
                 el.className = isMT ? "mt-status status-on" : "mt-status status-off";
             });
 
-            // Monitor Whitelist & Fitur Delete
             db.ref('whitelist').on('value', s => {
                 const l = s.val() || {}; const b = document.getElementById('wl-list');
                 b.innerHTML = "";
@@ -242,12 +246,11 @@
                     b.innerHTML += `
                     <div class="user-row">
                         <span>${l[id]}</span>
-                        <i class="fa-solid fa-trash-can" style="color:var(--danger); cursor:pointer; padding: 5px;" onclick="delWl('${id}')"></i>
+                        <i class="fa-solid fa-trash-can" style="color:var(--danger); cursor:pointer; padding:5px;" onclick="delWl('${id}')"></i>
                     </div>`;
                 }
             });
 
-            // Monitor Live User
             db.ref('online').on('value', s => {
                 const list = s.val() || {};
                 const container = document.getElementById('online-list');
@@ -261,17 +264,13 @@
         function toggleMaintenance() { db.ref('system/maintenance').set(!isMT); }
         function sendBc() { 
             const m = document.getElementById('bc-input').value;
-            if(m) { db.ref('system/bc').set(m); document.getElementById('bc-input').value = ""; pushNotif("Broadcast Sent!"); }
+            if(m) { db.ref('system/bc').set(m); document.getElementById('bc-input').value = ""; pushNotif("BC Sent!"); }
         }
         function addWl() { 
             const m = document.getElementById('wl-input').value.toLowerCase().trim();
-            if(m) { db.ref('whitelist').push(m); document.getElementById('wl-input').value=""; pushNotif("Email Added!"); }
+            if(m) { db.ref('whitelist').push(m); document.getElementById('wl-input').value=""; pushNotif("Added!"); }
         }
-        function delWl(id) { 
-            if(confirm("Hapus akses email ini?")) {
-                db.ref('whitelist/' + id).remove().then(() => pushNotif("Deleted!"));
-            } 
-        }
+        function delWl(id) { if(confirm("Hapus akses?")) db.ref('whitelist/' + id).remove(); }
 
         function showView(id) { 
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); 
@@ -282,44 +281,42 @@
         function toggleMenu(s) { document.getElementById('side-menu').classList.toggle('active', s); }
 
         function changeCard(d) {
-            currentPos = (currentPos + d + 3) % 3;
-            const cards = [document.getElementById('card-0'), document.getElementById('card-1'), document.getElementById('card-2')];
-            cards.forEach((c, i) => {
+            currentPos = (currentPos + d + totalCards) % totalCards;
+            for(let i=0; i<totalCards; i++) {
+                const c = document.getElementById('card-'+i);
                 c.className = 'card-3d';
                 if(i === currentPos) c.classList.add('active');
-                else if(i === (currentPos + 1) % 3) c.classList.add('next');
-                else c.classList.add('prev');
-            });
+                else if(i === (currentPos + 1) % totalCards) c.classList.add('next');
+                else if(i === (currentPos - 1 + totalCards) % totalCards) c.classList.add('prev');
+            }
         }
 
         function selectBug(name) {
             activeBug = name;
-            document.getElementById('feat-title').innerText = "EXECUTION FORM";
             document.getElementById('selected-bug-name').innerText = "Type: " + name;
             showView('feature');
         }
 
         function execute() {
             const target = document.getElementById('target').value;
-            if(!activeBug) { pushNotif("SELECT BUG FIRST!"); return; }
-            if(!target) { pushNotif("ENTER TARGET!"); return; }
+            if(!activeBug || !target) { pushNotif("Lengkapi Data!"); return; }
 
             const o = document.getElementById('popup-overlay'); o.style.display='flex';
             let p = 0;
             const i = setInterval(() => {
-                p += Math.floor(Math.random() * 20);
+                p += Math.floor(Math.random() * 25);
                 if(p > 100) p = 100;
                 document.getElementById('pct').innerText = p+"%";
                 if(p >= 100) { 
                     clearInterval(i); 
                     setTimeout(() => {
                         o.style.display='none'; 
-                        pushNotif("Success Sent " + activeBug); 
+                        pushNotif("Bug Sent!"); 
                         document.getElementById('target').value = "";
                         showView('dashboard'); 
                     }, 500);
                 }
-            }, 200);
+            }, 250);
         }
 
         function logout() { auth.signOut(); location.reload(); }
